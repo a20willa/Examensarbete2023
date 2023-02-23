@@ -18,7 +18,9 @@ app.get('/getAll', async (req, res) => {
     await client.connect();
     // Establish and verify connection
     await client.db("admin").command({ ping: 1 });
-    res.send("Done")
+    res.send({
+      "response": "Ping Successfull"
+    })
 
   } finally {
     // Ensures that the client will close when you finish/error
