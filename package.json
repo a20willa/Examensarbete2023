@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node ./src/server/mysql.js",
+    "start": "node ./src/server/mysql/index.js",
     "build": "tsc",
     "develop:mysql": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mysql/index.js\"",
     "develop:mongodb": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mongodb/index.js\""
