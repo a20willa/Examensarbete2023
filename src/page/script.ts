@@ -1,4 +1,5 @@
 async function callGetAllEndpoint() {
+    console.log("START")
     const fetches = []
     const itterationsInput = document.getElementById("itterations") as HTMLInputElement
 
@@ -10,13 +11,13 @@ async function callGetAllEndpoint() {
                     method: 'GET',
                     mode: 'cors',
                 },
-            ).then(res => console.log(i)))
+            ))
 
         } catch (e) {
-            throw new Error(e + "Cannot fetch endpoint 'getAll', is the server runnning?")
+            throw new Error(String(e))
         }
     }
 
     await Promise.all(fetches)
-    console.log("Done!")
+    console.log(`END - ${fetches.length} queries was runned successfully`)
 }
