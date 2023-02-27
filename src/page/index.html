@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <script src="script.js"></script>
+    <title>Test</title>
 </head>
 <body>
-    <h1> Please pick database to test</h1>
-    <ul>
-        <li>
-            <a href="mysql.html">MySQL</a>
-        </li>
-        <li>
-            <a href="mongodb.html">MongoDB</a>
-        </li>
-    </ul>
+    <h1> Test </h1>
+    <label for="database">Database</label>
+    <select id="database">
+        <option value="getAllMongodb">MongoDB</option>
+        <option value="getAllMysql">MySQL</option>
+    </select>
+    <BR>
+    <label for="itterations">Itterations:</label>
+    <input type="number" id="itterations"/>
+    <button onclick="callGetAllEndpoint()">
+        Run
+    </button>
 </body>
 </html>

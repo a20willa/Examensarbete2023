@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./src/server/mysql.js",
     "build": "tsc",
-    "develop": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/server.js\""
+    "develop:mysql": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mysql/index.js\"",
+    "develop:mongodb": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mongodb/index.js\""
   },
   "author": "",
   "license": "ISC",

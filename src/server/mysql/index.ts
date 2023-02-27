@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.static('src/page'))
 
 // Dummy endpoint
-app.get('/getAll', async (req: any, res: any) => {
+app.get('/getAllMysql', async (req: any, res: any) => {
   try {
     // Connect the client to the server (optional starting in v4.7)
     await client.connect();
