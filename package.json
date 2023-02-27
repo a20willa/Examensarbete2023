@@ -1,10 +1,9 @@
 {
-  "name": "mysql",
+  "name": "mysql-and-mongodb-testing",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node ./src/server/server.js",
+    "start": "node ./src/server/mysql.js",
     "build": "tsc",
     "develop": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/server.js\""
   },
