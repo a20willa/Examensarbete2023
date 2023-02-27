@@ -10,6 +10,8 @@ const client = new MongoClient(uri)
 
 // Use CORS to fetch via javascript
 app.use(cors());
+// Add static folder location
+app.use(express.static('src/page'))
 
 // Dummy endpoint
 app.get('/getAll', async (req, res) => {
