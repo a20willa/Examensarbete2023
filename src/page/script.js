@@ -27,3 +27,4 @@ function callGetAllEndpoint() {
         console.log("Done!");
     });
 }
+//# sourceMappingURL=script.js.map
