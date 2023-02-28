@@ -1,13 +1,7 @@
-/**
- * This file will look different depending on which branch you are in
- */
-
 const {MongoClient} = require('mongodb');
 const express = require('express')
 const cors = require('cors');
 const app = express()
-const port = 3000
-const uri = "mongodb://127.0.0.1:27017";
 
 // Create MongoDB client
 const client = new MongoClient(uri)
