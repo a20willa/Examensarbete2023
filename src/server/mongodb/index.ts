@@ -1,20 +1,20 @@
 const {MongoClient} = require('mongodb');
-const express = require('express')
-const cors = require('cors');
-const app = express()
-const port = 3000
-const uri = "mongodb://127.0.0.1:27017";
+const express_mongodb = require('express')
+const cors_mongodb = require('cors');
+const app_mongodb = express_mongodb()
+const port_mongodb = 3000
+const uri_mongodb = "mongodb://127.0.0.1:27017";
 
 // Create MongoDB client
-const client = new MongoClient(uri)
+const client = new MongoClient(uri_mongodb)
 
 // Use CORS to fetch via javascript
-app.use(cors());
+app_mongodb.use(cors_mongodb());
 // Add static folder location
-app.use(express.static('src/page'))
+app_mongodb.use(express_mongodb.static('src/page'))
 
 // Dummy endpoint
-app.get('/getAllMongodb', async (req: any, res: any) => {
+app_mongodb.get('/getAllMongodb', async (req: any, res: any) => {
   try {
     // Connect the client to the server (optional starting in v4.7)
     await client.connect();
@@ -31,6 +31,6 @@ app.get('/getAllMongodb', async (req: any, res: any) => {
 })
 
 // Listen to port 3000
-app.listen(port, () => {
+app_mongodb.listen(port_mongodb, () => {
   console.log("Server started")
 })
