@@ -1,6 +1,13 @@
 import random
 import json
 
+# Global settings
+"""
+The amount of points a linestring or polygon should have (minimum 4 due to geojson constraints)
+Note that this does apply for points
+"""
+itterations = 4 
+
 def generate_random_point_data(n):
     """
     Generates n random geospatial points in GeoJSON format.
@@ -12,34 +19,14 @@ def generate_random_point_data(n):
         str: GeoJSON string representing the generated points.
     """
     # Define the GeoJSON features list
-    features = []
-    
-    for i in range(n):
-        # Generate random coordinates in the range of -180 to 180 for longitude and -90 to 90 for latitude
-        longitude = random.uniform(-180, 180)
-        latitude = random.uniform(-90, 90)
+    coordinates = []
 
-        # Create a GeoJSON feature for the point
-        feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [longitude, latitude]
-            },
-            "properties": {}
-        }
-        
-        # Append the feature to the features list
-        features.append(feature)
-    
-    # Create the GeoJSON object
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-    
-    # Return the GeoJSON string
-    return json.dumps(geojson)
+    # Generate random coordinates in the range of -180 to 180 for longitude and -90 to 90 for latitude
+    longitude = random.uniform(-180, 180)
+    latitude = random.uniform(-90, 90)
+    coordinates = [longitude, latitude]
+
+    return coordinates
 
 def generate_random_linestring_data(num_points):
     """
@@ -52,7 +39,6 @@ def generate_random_linestring_data(num_points):
         str: GeoJSON string representing the generated linestring.
     """
     # Define the GeoJSON features list
-    features = []
     coordinates = []
 
     # Generate random coordinates for the start and end points of the linestring
@@ -61,27 +47,7 @@ def generate_random_linestring_data(num_points):
         latitude = random.uniform(-90, 90)
         coordinates.append([longitude, latitude])
 
-    # Create the GeoJSON feature for the linestring
-    linestring_feature = {
-        "type": "Feature",
-        "geometry": {
-            "type": "LineString",
-            "coordinates":  coordinates
-        },
-        "properties": {}
-    }
-
-    # Append the feature to the features list
-    features.append(linestring_feature)
-
-    # Create the GeoJSON object
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-
-    # Return the GeoJSON string
-    return json.dumps(geojson)
+    return coordinates
 
 def generate_random_polygon_data(num_points):
     """
@@ -94,7 +60,6 @@ def generate_random_polygon_data(num_points):
         str: GeoJSON string representing the generated polygon.
     """
     # Define the GeoJSON features list
-    features = []
     coordinates = [[]]
     firstLine = []
 
@@ -122,12 +87,92 @@ def generate_random_polygon_data(num_points):
     if area < 0:
         coordinates[0].reverse()
 
+    return coordinates
+
+def generate_one_of_datatype(datatype):
+    """
+    Generates a single geospatial point, linestring, or polygon in GeoJSON format.
+
+    Args:
+        datatype ("point" | "linestring" | "polygon"): The datatype to generate
+        
+    Returns:
+        str: GeoJSON string representing the generated collection
+    """
+    # Define the GeoJSON features list
+    features = []
+    functionToRun = None
+    type = ""
+
+    if datatype == "point":
+        functionToRun = generate_random_point_data
+        type = "Point"
+    elif datatype == "linestring":
+        functionToRun = generate_random_linestring_data
+        type = "LineString"
+    elif datatype == "polygon":
+        functionToRun = generate_random_polygon_data
+        type = "Polygon"
+
     # Create the GeoJSON feature for the polygon
     polygon_feature = {
         "type": "Feature",
         "geometry": {
-            "type": "Polygon",
-            "coordinates":  coordinates
+            "type": type,
+            "coordinates":  functionToRun(itterations)
+        },
+        "properties": {}
+    }
+
+    # Append the feature to the features list
+    features.append(polygon_feature)
+
+    # Create the GeoJSON object
+    geojson = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    # Return the GeoJSON string
+    return json.dumps(geojson)
+    
+
+def generate_collection_of_datatype(datatype, length):
+    """
+    Generates a collection of either geospatial points, linestrings, or polygons in GeoJSON format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
+
+    Args:
+        datatype ("point" | "linestring" | "polygon"): The datatype to generate
+        length (number): The amount of items in the collection
+        
+    Returns:
+        str: GeoJSON string representing the generated collection
+    """
+    # Define the GeoJSON features list
+    collection = []
+    features = []
+    functionToRun = None
+    type = ""
+
+    if datatype == "point":
+        functionToRun = generate_random_point_data
+        type = "MultiPoint"
+    elif datatype == "linestring":
+        functionToRun = generate_random_linestring_data
+        type = "MultiLineString"
+    elif datatype == "polygon":
+        functionToRun = generate_random_polygon_data
+        type = "MultiPolygon"
+
+    for i in range(length): 
+        collection.append(functionToRun(itterations))
+
+    # Create the GeoJSON feature for the polygon
+    polygon_feature = {
+        "type": "Feature",
+        "geometry": {
+            "type": type,
+            "coordinates": collection
         },
         "properties": {}
     }
@@ -144,23 +189,10 @@ def generate_random_polygon_data(num_points):
     # Return the GeoJSON string
     return json.dumps(geojson)
 
-def generate_collection_of_datatype(datatype):
-    """
-    Generates a collection of either geospatial points, linestrings, or polygons in GeoJSON format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
-
-    Args:
-        datatype ("point" | "linestring" | "polygon"): The datatype to generate
-        
-    Returns:
-        str: GeoJSON string representing the generated collection
-    """
-
-    
-
 # Generate 10 random points
 point_data = generate_random_point_data(10)
 line_data = generate_random_linestring_data(5)
 polygon_data = generate_random_polygon_data(5)
 
 # Print the GeoJSON string
-print(polygon_data)
+print(generate_collection_of_datatype("point", 8))
