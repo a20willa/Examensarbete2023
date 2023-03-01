@@ -1,4 +1,4 @@
-const {MongoClient} = require('mongodb');
+const { MongoClient } = require('mongodb');
 const express_mongodb = require('express')
 const cors_mongodb = require('cors');
 const app_mongodb = express_mongodb()
@@ -17,13 +17,15 @@ app_mongodb.use(express_mongodb.static('src/page'))
 app_mongodb.get('/getAllMongodb', async (req: any, res: any) => {
   try {
     // Connect the client to the server (optional starting in v4.7)
-    await client.connect();
+    const db = await client.connect();
+    var dbo = db.db("MongoDB_Tests");
     // Establish and verify connection
-    await client.db("admin").command({ ping: 1 });
+    const cursor = dbo.collection("MongoDB_Tests").find()
     res.send({
-      "response": "Ping Successfull"
+      "response": await cursor.toArray()
     })
-
+  } catch (e) {
+    console.log(e)
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
