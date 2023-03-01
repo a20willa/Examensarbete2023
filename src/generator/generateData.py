@@ -95,7 +95,7 @@ def generate_random_polygon_data(num_points):
     """
     # Define the GeoJSON features list
     features = []
-    coordinates = []
+    coordinates = [[]]
     firstLine = []
 
     # Generate random coordinates for the start and end points of the polygon
@@ -105,12 +105,22 @@ def generate_random_polygon_data(num_points):
 
         # We need to save the first point as the first and last point in a polygon always is the same
         if i == 0:
-            firstLine.append([longitude, latitude])   
-            coordinates.append([longitude, latitude])
+            firstLine = [longitude, latitude]   
+            coordinates[0].append([longitude, latitude])
         elif i == num_points - 1:
-            coordinates.append(firstLine)
+            coordinates[0].append(firstLine)
         else:
-           coordinates.append([longitude, latitude])
+           coordinates[0].append([longitude, latitude])
+
+    # Calculate the polygon's area (This is to make sure the polygon follows the "right-hand" rule - https://www.rfc-editor.org/rfc/rfc7946#section-3.1.6)
+    area = 0
+    for i in range(num_points):
+        j = (i + 1) % num_points
+        area += coordinates[0][i][0] * coordinates[0][j][1] - coordinates[0][j][0] * coordinates[0][i][1]
+
+    # If the area is negative, reverse the order of the vertices
+    if area < 0:
+        coordinates[0].reverse()
 
     # Create the GeoJSON feature for the polygon
     polygon_feature = {
@@ -133,6 +143,19 @@ def generate_random_polygon_data(num_points):
 
     # Return the GeoJSON string
     return json.dumps(geojson)
+
+def generate_collection_of_datatype(datatype):
+    """
+    Generates a collection of either geospatial points, linestrings, or polygons in GeoJSON format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
+
+    Args:
+        datatype ("point" | "linestring" | "polygon"): The datatype to generate
+        
+    Returns:
+        str: GeoJSON string representing the generated collection
+    """
+
+    
 
 # Generate 10 random points
 point_data = generate_random_point_data(10)
