@@ -1,4 +1,5 @@
 import random
+from random import seed
 import json
 
 # Global settings
@@ -8,6 +9,12 @@ Note that this does apply for points
 """
 itterations = 4 
 
+"""
+The seed for random generation, MUST BE SET or data will NOT be the same across generation instances 
+"""
+seed(3)
+
+# Functions
 def generate_random_point_data(n):
     """
     Generates n random geospatial points in GeoJSON format.
@@ -189,10 +196,13 @@ def generate_collection_of_datatype(datatype, length):
     # Return the GeoJSON string
     return json.dumps(geojson)
 
-# Generate 10 random points
-point_data = generate_random_point_data(10)
-line_data = generate_random_linestring_data(5)
-polygon_data = generate_random_polygon_data(5)
+def jsonToFile(filename, data):
+    """
+    Writes json data to a file
 
-# Print the GeoJSON string
-print(generate_collection_of_datatype("point", 8))
+    Args:
+        filename (string): The name of the file
+        data (string): Json as a string 
+    """
+    with open(filename, "w") as json_file:
+        json_file.write(data)
