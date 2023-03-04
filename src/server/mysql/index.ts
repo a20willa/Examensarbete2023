@@ -7,9 +7,9 @@ const port_mysql = 3000;
 // Create MySQL connection
 const connection = mysql.createConnection({
   host: '127.0.0.1',
-  user: 'someuser',
-  password: 'somepass',
-  database: 'testing_db',
+  user: 'a20willa',
+  password: 'mysql123',
+  database: 'mysql_database',
   port: '3306'
 })
 connection.connect()
@@ -22,9 +22,9 @@ app_mysql.use(express_mysql.static('src/page'))
 // Send the results
 function getRows(req: any, res: any) {
   // Make some MySQL queries
-  connection.query('SELECT 1 + 1 AS solution', (err: Error, result: any) => {
+  connection.query('SELECT * from spatial_data_testing', (err: Error, result: any) => {
     if (err) throw err;
-    res.send(`The solution is: ${result[0].solution}`);
+    res.send(`Response ${result[0].solution}`);
   });
 }
 

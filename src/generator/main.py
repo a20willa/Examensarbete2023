@@ -12,7 +12,7 @@ mycol.delete_many({})
 # Functions
 def insertCollections(amountOfDocumentsToGenerate):
     """
-    Inserts documents into a given collection
+    Inserts x collection instance documents into a given collection
 
     Args:
         amountOfDocumentsToGenerate (number): The amount of documents to generate
@@ -23,7 +23,7 @@ def insertCollections(amountOfDocumentsToGenerate):
 
 def insertOnes(amountOfFilesToGenerate):
     """
-    Inserts documents into a given collection
+    Inserts x single instance documents into a given collection
 
     Args:
         amountOfDocumentsToGenerate (number): The amount of documents to generate
