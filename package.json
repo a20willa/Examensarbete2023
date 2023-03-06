@@ -6,7 +6,9 @@
     "start": "node ./src/server/mysql/index.js",
     "build": "tsc",
     "dev:mysql": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mysql/index.js\"",
-    "dev:mongodb": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mongodb/index.js\""
+    "dev:mongodb": "concurrently --kill-others \"tsc --sourcemap --watch\" \"nodemon ./src/server/mongodb/index.js\"",
+    "start:mysql": "node ./src/server/mysql/index.js",
+    "start:mongodb": "node ./src/server/mongodb/index.js"
   },
   "author": "",
   "license": "ISC",
