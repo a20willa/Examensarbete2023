@@ -33,7 +33,11 @@ function getRows(req: any, res: any) {
   // Make some MySQL queries
   connection.query(`SELECT * from ${data_mysql.table_name}`, (err: Error, result: any) => {
     if (err) throw err;
-    res.send(`Response ${result[0].solution}`);
+    if(result.length != 0) {
+      res.send(`Response ${result[0].solution}`);
+    } else {
+      res.send([])
+    }
   });
 }
 
