@@ -10,6 +10,7 @@
     "start:mysql": "node ./src/server/mysql/index.js",
     "start:mongodb": "node ./src/server/mongodb/index.js"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -17,9 +18,13 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongodb": "^5.1.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-fetch": "^3.3.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/mysql": "^2.15.21",
+    "@types/node": "^18.14.6",
     "nodemon": "^2.0.20",
     "typescript": "^4.9.5"
   }
