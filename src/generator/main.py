@@ -2,12 +2,16 @@ from generateData import generate_collection_of_datatype, generate_one_of_dataty
 import pymongo
 
 # Create mongodb client
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient()
 mydb = myclient["MongoDB_Tests"]
 mycol = mydb["MongoDB_Tests"]
 
 # Remove everyting in the database
-mycol.delete_many({})
+try:
+    mycol.delete_many({})
+except pymongo.errors.ServerSelectionTimeoutError:
+    print("Could not connect to MongoDB database, is it running?")
+    exit(1)
 
 # Functions
 def insertCollections(amountOfDocumentsToGenerate):
