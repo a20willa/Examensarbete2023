@@ -1,10 +1,15 @@
 from generateData import generate_collection_of_datatype, generate_one_of_datatype, json
 import pymongo
+from dotenv import dotenv_values
 
 # Create mongodb client
+config = dotenv_values(".env")
 myclient = pymongo.MongoClient()
-mydb = myclient["MongoDB_Tests"]
-mycol = mydb["MongoDB_Tests"]
+mydb = myclient[config["mongodb_database"]]
+mycol = mydb[config["mongodb_collection_name"]]
+
+# Start of application
+print("Starting...")
 
 # Remove everyting in the database
 try:
@@ -37,5 +42,6 @@ def insertOnes(amountOfFilesToGenerate):
         mycol.insert_one(data)
 
 # Either of these can be called
+print("Done")
 insertCollections(100)
 # insertOnes(100)

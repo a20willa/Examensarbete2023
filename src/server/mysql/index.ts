@@ -1,4 +1,4 @@
-import { connection_strings_mysql } from "../mongodb/connection_strings"
+import { connection_strings_mysql } from "../connection_strings"
 import * as dotenv from 'dotenv'
 dotenv.config()
 import mysql from 'mysql'

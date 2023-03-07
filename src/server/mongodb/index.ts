@@ -1,4 +1,4 @@
-import { connection_strings_mongodb } from './connection_strings';
+import { connection_strings_mongodb } from '../connection_strings';
 import * as dotenv from 'dotenv'
 dotenv.config()
 import { MongoClient } from 'mongodb';
