@@ -38,10 +38,10 @@ def insertOnes(amountOfFilesToGenerate):
         amountOfDocumentsToGenerate (number): The amount of documents to generate
     """
     for i in range(amountOfFilesToGenerate):
-        data = json.loads(generate_one_of_datatype("point", i, 100))
+        data = json.loads(generate_one_of_datatype("polygon", i, 10))
         mycol.insert_one(data)
 
 # Either of these can be called
 print("Done")
-insertCollections(100)
-# insertOnes(100)
+#insertCollections(100)
+insertOnes(100)
