@@ -1,16 +1,18 @@
 import { connection_strings_mysql } from "../mongodb/connection_strings"
+import * as dotenv from 'dotenv'
+dotenv.config()
 import mysql from 'mysql'
 import express_mysql from 'express'
 import cors_mysql from 'cors'
 const app_mysql = express_mysql()
 const port_mysql = 3000;
 const data_mysql: connection_strings_mysql = {
-  host: "127.0.0.1",
-  user: "a20willa",
-  user_password: "mysql123",
-  database: "mysql_database",
-  port: 3306,
-  table_name: "spatial_data_testing",
+  host: process.env.mysql_host! as string,
+  user: process.env.mysql_user! as string,
+  user_password: process.env.mysql_user_password! as string,
+  database: process.env.mysql_database! as string,
+  port: process.env.mysql_port! as unknown as number,
+  table_name: process.env.mysql_table_name! as string,
 }
 
 // Create MySQL connection
