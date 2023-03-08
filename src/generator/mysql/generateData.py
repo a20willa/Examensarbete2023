@@ -4,7 +4,7 @@
 
 import random
 from random import seed
-import json
+import re
 
 # Functions
 
@@ -164,53 +164,64 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
     functionToRun = None
     type = ""
     prompt = ""
+    coordinates = []
 
     # Get the data type
     if datatype == "point":
         functionToRun = generate_random_point_data
-        type = "Point"
+        type = "MultiPoint"
     elif datatype == "linestring":
         functionToRun = generate_random_linestring_data
-        type = "LineString"
+        type = "MultiLineString"
     elif datatype == "polygon":
         functionToRun = generate_random_polygon_data
-        type = "Polygon"
+        type = "MultiPolygon"
 
-    # Get coordinates
-    coordinates = functionToRun(pointsToGenerate)
+    for i in range(amountOfInstancesInItem): 
+        coordinates.append(functionToRun(pointsToGenerate))
 
     # Check which datatype to create a query for
     if datatype == "point":
-        prompt += "({}".format(type)
+        prompt += "{}(".format(type)
         for points in coordinates:
-            prompt = "({} {}),".format(type, coordinates[0], coordinates[1])
+            prompt += "({} {}),".format(points[0], points[1])
         prompt += ")"
+
+        # Remove commas before closing ")"
+        prompt = re.sub(r',\s*\)', ')', prompt)
     elif datatype == "linestring":
         prompt += "{}(".format(type)
-        for point in coordinates:
-            prompt += "{} {},".format(point[0], point[1])
-        prompt += ")"
-    elif datatype == "polygon":
-        prompt += "{}((".format(type)
         for points in coordinates:
+            prompt += "("
             for point in points:
-                prompt += "{} {},".format(point[0], point[0])
-        prompt += "))"
+                prompt += "{} {},".format(point[0], point[1])
+            prompt += "),"
+        prompt += ")"
+
+        # Remove commas before closing ")"
+        prompt = re.sub(r',\s*\)', ')', prompt)
+    elif datatype == "polygon":
+        print(coordinates)
+        prompt += "{}(".format(type)
+        for polygon in coordinates:
+            prompt += "("
+            for points in polygon:
+                prompt += "("
+                for point in points:
+                    prompt += "{} {},".format(point[0], point[1])
+                prompt = prompt[:-1] + "),"
+            prompt = prompt[:-1] + "),"
+        prompt = prompt[:-1] + ")"
 
     return prompt
 
 def test(): 
     # Testing
-    print(generate_one_of_datatype("point", 999,3))
     print()
-    print(generate_one_of_datatype("linestring", 999,3))
+    # print(generate_collection_of_datatype("point", 3, 999, 3))
     print()
-    print(generate_one_of_datatype("polygon", 999,3))
+    # print(generate_collection_of_datatype("linestring", 3, 999, 3))
     print()
-    print(generate_collection_of_datatype("point", 10, 999, 3))
-    print()
-    print(generate_collection_of_datatype("linestring", 10, 999, 3))
-    print()
-    print(generate_collection_of_datatype("polygon", 10, 999, 3))
+    print(generate_collection_of_datatype("polygon", 3, 999, 3))
 
 test()
