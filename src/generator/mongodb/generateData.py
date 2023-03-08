@@ -1,3 +1,7 @@
+#===================#
+#      MongoDB      #
+#===================#
+
 import random
 from random import seed
 import json
@@ -155,6 +159,7 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
     functionToRun = None
     type = ""
 
+    # Check which datatype to create a query for
     if datatype == "point":
         functionToRun = generate_random_point_data
         type = "MultiPoint"
@@ -189,14 +194,3 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
 
     # Return the GeoJSON string
     return json.dumps(geojson)
-
-def jsonToFile(filename, data):
-    """
-    Writes json data to a file
-
-    Args:
-        filename (string): The name of the file
-        data (string): Json as a string 
-    """
-    with open(filename, "w") as json_file:
-        json_file.write(data)

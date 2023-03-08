@@ -1,3 +1,7 @@
+#===================#
+#       MySQL       #
+#===================#
+
 import random
 from random import seed
 import json
@@ -7,15 +11,15 @@ import json
 
 def generate_random_point_data(n):
     """
-    Generates n random geospatial points in GeoJSON format.
+    Generates n random geospatial points in MySQL format.
 
     Args:
         n (int): Number of points to generate.
 
     Returns:
-        str: GeoJSON string representing the generated points.
+        str: MySQL string representing the generated points.
     """
-    # Define the GeoJSON features list
+    # Define the MySQL features list
     coordinates = []
 
     # Generate random coordinates in the range of -180 to 180 for longitude and -90 to 90 for latitude
@@ -28,15 +32,15 @@ def generate_random_point_data(n):
 
 def generate_random_linestring_data(num_points):
     """
-    Generates a random geospatial linestring in GeoJSON format.
+    Generates a random geospatial linestring in MySQL format.
 
     Args:
         num_points (int): Number of points to generate for the linestring.
 
     Returns:
-        str: GeoJSON string representing the generated linestring.
+        str: MySQL string representing the generated linestring.
     """
-    # Define the GeoJSON features list
+    # Define the MySQL features list
     coordinates = []
 
     # Generate random coordinates for the start and end points of the linestring
@@ -50,15 +54,15 @@ def generate_random_linestring_data(num_points):
 
 def generate_random_polygon_data(num_points):
     """
-    Generates a random geospatial polygon in GeoJSON format.
+    Generates a random geospatial polygon in MySQL format.
 
     Args:
         num_points (int): Number of points to generate for the polygon.
 
     Returns:
-        str: GeoJSON string representing the generated polygon.
+        str: MySQL string representing the generated polygon.
     """
-    # Define the GeoJSON features list
+    # Define the MySQL features list
     coordinates = [[]]
     firstLine = []
 
@@ -92,7 +96,7 @@ def generate_random_polygon_data(num_points):
 
 def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
     """
-    Generates a single geospatial point, linestring, or polygon in GeoJSON format.
+    Generates a single geospatial point, linestring, or polygon in MySQL format.
 
     Args:
         datatype ("point" | "linestring" | "polygon"): The datatype to generate
@@ -100,14 +104,15 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
         pointsToGenerate (number): The amount of points to generate for either a linestring or a polygon
 
     Returns:
-        str: GeoJSON string representing the generated collection
+        str: MySQL string representing the generated collection
     """
-    # Define the GeoJSON features list
+    # Define the MySQL features list
     seed(randomSeed)
     functionToRun = None
     type = ""
     prompt = ""
 
+    # Get the data type
     if datatype == "point":
         functionToRun = generate_random_point_data
         type = "Point"
@@ -118,7 +123,10 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
         functionToRun = generate_random_polygon_data
         type = "Polygon"
 
+    # Get coordinates
     coordinates = functionToRun(pointsToGenerate)
+
+    # Check which datatype to create a query for
     if datatype == "point":
         prompt = "{}({}, {})".format(type, coordinates[0], coordinates[1])
     elif datatype == "linestring":
@@ -133,14 +141,14 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
                 prompt += "{} {},".format(point[0], point[0])
         prompt += "))"
 
-    # Return the GeoJSON string
+    # Return the MySQL string
     print(prompt)
     return prompt
 
 
 def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSeed, pointsToGenerate):
     """
-    Generates a collection of either geospatial points, linestrings, or polygons in GeoJSON format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
+    Generates a collection of either geospatial points, linestrings, or polygons in MySQL format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
 
     Args:
         datatype ("point" | "linestring" | "polygon"): The datatype to generate
@@ -149,58 +157,60 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         pointsToGenerate (number): The amount of points to generate for either a linestring or a polygon
 
     Returns:
-        str: GeoJSON string representing the generated collection
+        str: MySQL string representing the generated collection
     """
-    # Define the GeoJSON features list
+    # Define the MySQL features list
     seed(randomSeed)
-    collection = []
-    features = []
     functionToRun = None
     type = ""
+    prompt = ""
 
+    # Get the data type
     if datatype == "point":
         functionToRun = generate_random_point_data
-        type = "MultiPoint"
+        type = "Point"
     elif datatype == "linestring":
         functionToRun = generate_random_linestring_data
-        type = "MultiLineString"
+        type = "LineString"
     elif datatype == "polygon":
         functionToRun = generate_random_polygon_data
-        type = "MultiPolygon"
+        type = "Polygon"
 
-    for i in range(amountOfInstancesInItem):
-        collection.append(functionToRun(pointsToGenerate))
+    # Get coordinates
+    coordinates = functionToRun(pointsToGenerate)
 
-    # Create the GeoJSON feature for the polygon
-    polygon_feature = {
-        "type": "Feature",
-        "geometry": {
-            "type": type,
-            "coordinates": collection
-        },
-        "properties": {}
-    }
+    # Check which datatype to create a query for
+    if datatype == "point":
+        prompt += "({}".format(type)
+        for points in coordinates:
+            prompt = "({} {}),".format(type, coordinates[0], coordinates[1])
+        prompt += ")"
+    elif datatype == "linestring":
+        prompt += "{}(".format(type)
+        for point in coordinates:
+            prompt += "{} {},".format(point[0], point[1])
+        prompt += ")"
+    elif datatype == "polygon":
+        prompt += "{}((".format(type)
+        for points in coordinates:
+            for point in points:
+                prompt += "{} {},".format(point[0], point[0])
+        prompt += "))"
 
-    # Append the feature to the features list
-    features.append(polygon_feature)
+    return prompt
 
-    # Create the GeoJSON object
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+def test(): 
+    # Testing
+    print(generate_one_of_datatype("point", 999,3))
+    print()
+    print(generate_one_of_datatype("linestring", 999,3))
+    print()
+    print(generate_one_of_datatype("polygon", 999,3))
+    print()
+    print(generate_collection_of_datatype("point", 10, 999, 3))
+    print()
+    print(generate_collection_of_datatype("linestring", 10, 999, 3))
+    print()
+    print(generate_collection_of_datatype("polygon", 10, 999, 3))
 
-    # Return the GeoJSON string
-    return json.dumps(geojson)
-
-
-def jsonToFile(filename, data):
-    """
-    Writes json data to a file
-
-    Args:
-        filename (string): The name of the file
-        data (string): Json as a string 
-    """
-    with open(filename, "w") as json_file:
-        json_file.write(data)
+test()

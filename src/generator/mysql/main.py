@@ -1,3 +1,7 @@
+#===================#
+#       MySQL       #
+#===================#
+
 from generateData import generate_collection_of_datatype, generate_one_of_datatype, json
 import pymongo
 from dotenv import dotenv_values
