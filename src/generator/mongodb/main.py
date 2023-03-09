@@ -34,14 +34,14 @@ def insertCollections(amountOfDocumentsToGenerate):
         data = json.loads(generate_collection_of_datatype("point", 100, i, 100))
         mycol.insert_one(data)
 
-def insertOnes(amountOfFilesToGenerate):
+def insertOnes(amountOfDocumentsToGenerate):
     """
     Inserts x single instance documents into a given collection
 
     Args:
         amountOfDocumentsToGenerate (number): The amount of documents to generate
     """
-    for i in range(amountOfFilesToGenerate):
+    for i in range(amountOfDocumentsToGenerate):
         data = json.loads(generate_one_of_datatype("point", i, 100))
         mycol.insert_one(data)
 

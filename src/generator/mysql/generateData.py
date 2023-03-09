@@ -128,7 +128,7 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
 
     # Check which datatype to create a query for
     if datatype == "point":
-        prompt = "{}({}, {})".format(type, coordinates[0], coordinates[1])
+        prompt = "{}({} {})".format(type, coordinates[0], coordinates[1])
     elif datatype == "linestring":
         prompt += "{}(".format(type)
         for point in coordinates:
@@ -142,7 +142,6 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
         prompt += "))"
 
     # Return the MySQL string
-    print(prompt)
     return prompt
 
 
@@ -201,7 +200,6 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         # Remove commas before closing ")"
         prompt = re.sub(r',\s*\)', ')', prompt)
     elif datatype == "polygon":
-        print(coordinates)
         prompt += "{}(".format(type)
         for polygon in coordinates:
             prompt += "("
@@ -214,14 +212,3 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         prompt = prompt[:-1] + ")"
 
     return prompt
-
-def test(): 
-    # Testing
-    print()
-    # print(generate_collection_of_datatype("point", 3, 999, 3))
-    print()
-    # print(generate_collection_of_datatype("linestring", 3, 999, 3))
-    print()
-    print(generate_collection_of_datatype("polygon", 3, 999, 3))
-
-test()
