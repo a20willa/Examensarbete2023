@@ -12,7 +12,7 @@ import sys
 
 # Import helper functions
 sys.path.insert(1, 'src/generator/helpers')
-from command_line_parser import command_line_parser
+from helpers import command_line_parser, createSeperator
 
 # Create mongodb client
 config = dotenv_values(".env")
@@ -88,30 +88,6 @@ def insertOnes(amountOfQueriesToGenerate, type, pointsToGenerate):
         config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
     mycursor.executemany(sql, vals)
-
-
-def createSeperator(text, matchStringLength, customLength=None):
-    """
-    Creates seperators (i.e. =====) to make output prettier
-
-    Args:
-        text (string): The text to be in the middle of the equal signs
-        matchStringLength (string): Text to match the length of (i.e. if this word is 30 characters, the return value of this function will be 30 characters too)
-        customLength (number): A custom length of the return value of this function (overrides matchStringLength)
-    Returns:
-        separator, separator_line: Both the header (`====text====`) and footer (`============`)
-    """
-    if customLength:
-        separator_length = customLength
-    else:
-        separator_length = len(matchStringLength)
-
-    left_side = (separator_length - len(text)) // 2
-    right_side = separator_length - len(text) - left_side
-    separator = "=" * left_side + text + "=" * right_side
-    separator_line = "=" * separator_length
-
-    return separator, separator_line
 
 
 def select():

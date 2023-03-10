@@ -65,3 +65,26 @@ def command_line_parser():
         exit(1)
 
     return amount, type, points
+
+def createSeperator(text, matchStringLength, customLength=None):
+    """
+    Creates seperators (i.e. =====) to make output prettier
+
+    Args:
+        text (string): The text to be in the middle of the equal signs
+        matchStringLength (string): Text to match the length of (i.e. if this word is 30 characters, the return value of this function will be 30 characters too)
+        customLength (number): A custom length of the return value of this function (overrides matchStringLength)
+    Returns:
+        separator, separator_line: Both the header (`====text====`) and footer (`============`)
+    """
+    if customLength:
+        separator_length = customLength
+    else:
+        separator_length = len(matchStringLength)
+
+    left_side = (separator_length - len(text)) // 2
+    right_side = separator_length - len(text) - left_side
+    separator = "=" * left_side + text + "=" * right_side
+    separator_line = "=" * separator_length
+
+    return separator, separator_line
