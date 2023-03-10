@@ -18,27 +18,29 @@ sqldb = mysql.connector.connect(
   database=config["mysql_database"]
 )
 
+# Creates the cursor needed to execute queries
 mycursor = sqldb.cursor()
 
 # Start of application
 print("Starting...")
 
-# Remove everyting in the database
+# Drop the table as it needs to be empty before adding new data
 try:
-    # Delete everythinng
+    # 
     sql = "DROP TABLE IF EXISTS {}".format(config["mysql_table_name"])    
     mycursor.execute(sql)
 except Exception as e:
-    print("Table does not exist or database is not running")
+    print(e)
 
+# Create the table with a id and a single column for the geospatial data
 try:
     sql = "CREATE TABLE {} (id INT NOT NULL AUTO_INCREMENT, g GEOMETRY, PRIMARY KEY (id))".format(config["mysql_table_name"])    
     mycursor.execute(sql)
 except Exception as e:
-    print("Database is not running")
+    print(e)
 
-# Functions
-def insertCollections(amountOfQueriesToGenerate):
+# Create functions to insert data into MySQL
+def insertCollections(amountOfQueriesToGenerate, type):
     """
     Inserts x collection instance documents into a given collection
 
@@ -46,31 +48,48 @@ def insertCollections(amountOfQueriesToGenerate):
         amountOfQueriesToGenerate (number): The amount of documents to generate
     """
     mysqlSpatialData = []
-    for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_collection_of_datatype("point", 100, 3)))
 
+    # Create all queries and put them in an array
+    for i in range(amountOfQueriesToGenerate):
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_collection_of_datatype(type, 100, 3)))
+
+    # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
     print(vals)
     mycursor.executemany(sql, vals)
         
-def insertOnes(amountOfQueriesToGenerate):
+def insertOnes(amountOfQueriesToGenerate, type):
     """
     Inserts x single instance queries into a given collection
 
     Args:
         amountOfQueriesToGenerate (number): The amount of documents to generate
+        type ("point" | "linestring" | "polygon"): The datatype to generate
     """
     mysqlSpatialData = []
-    for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype("polygon", 100, 3)))
 
+    # Create all queries and put them in an array
+    for i in range(amountOfQueriesToGenerate):
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype(type, 100, 3)))
+
+    # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
     print(vals)
     mycursor.executemany(sql, vals)
 
 def createSeperator(text, matchStringLength, customLength=None):
+    """
+    Creates seperators (i.e. =====) to make output prettier
+
+    Args:
+        text (string): The text to be in the middle of the equal signs
+        matchStringLength (string): Text to match the length of (i.e. if this word is 30 characters, the return value of this function will be 30 characters too)
+        customLength (number): A custom length of the return value of this function (overrides matchStringLength)
+    Returns:
+        separator, separator_line: Both the header (`====text====`) and footer (`============`)
+    """
     if customLength:
         separator_length = customLength
     else:
@@ -84,6 +103,9 @@ def createSeperator(text, matchStringLength, customLength=None):
     return separator, separator_line
 
 def select():
+    """
+    Executes a select statement to print the table contents in human readable form
+    """
     sql = "SELECT ST_AsText(g) from {}".format(config["mysql_table_name"])
     mycursor.execute(sql)
     result = mycursor.fetchall()
@@ -94,7 +116,6 @@ def select():
     print(separator_line)
 
 
-# Either of these can be called
 #insertCollections(100)
 insertOnes(8)
 
