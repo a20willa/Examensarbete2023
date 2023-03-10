@@ -2,12 +2,17 @@
 #       MySQL       #
 # ===================#
 
+# Import needed dependencies
 from generateData import generate_collection_of_datatype, generate_one_of_datatype
 import pymongo
 from dotenv import dotenv_values
 import mysql.connector
 import re
-import sys, getopt
+import sys
+
+# Import helper functions
+sys.path.insert(1, 'src/generator/helpers')
+from command_line_parser import command_line_parser
 
 # Create mongodb client
 config = dotenv_values(".env")
@@ -128,40 +133,7 @@ def select():
     print(separator_line)
 
 def main():
-    amount = 1
-    type = ""
-
-    if len(sys.argv) > 1:
-        arguments, values = getopt.getopt(sys.argv[1:], "a:t:h:", ["amount=", "type=", "help"])
-        for currentArgument, currentValue in arguments:
-            if currentArgument in ("-a", "--amount"):
-                try:
-                    int(currentValue)
-                except ValueError:
-                    print("Value must be an innt")
-                amount = int(currentValue)
-            elif currentArgument in ("-t", "--type"):
-                if currentValue not in ["point", "linestring", "polygon"]:
-                    print("Invalid option, must be either 'point', 'linestring' or 'polygon'") 
-                    exit(1)
-                else:
-                    type = currentValue
-
-            elif currentArgument in ("-h", "--help"):
-                print('''
-    This script generates spatial data of a given type and amount. It takes the following optional arguments:
-
-    -a, --amount : number of geometries to generate (default: 1)
-    -t, --type : type of geometry to generate, must be one of 'point', 'linestring', or 'polygon' (default: '')
-    -h, --help :displays this text
-
-    Example usage:
-    python script.py --amount 10 --type linestring
-                ''')
-                exit(0)
-    else:
-        print("No arguments were given")
-        exit(1)
+    amount, type = command_line_parser()
 
     # insertCollections(100)
     insertOnes(amount, type)
