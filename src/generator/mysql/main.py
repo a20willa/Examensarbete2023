@@ -27,9 +27,6 @@ sqldb = mysql.connector.connect(
 # Creates the cursor needed to execute queries
 mycursor = sqldb.cursor()
 
-# Start of application
-print("Starting...")
-
 # Drop the table as it needs to be empty before adding new data
 try:
     #
@@ -71,26 +68,25 @@ def insertCollections(amountOfQueriesToGenerate, type):
     mycursor.executemany(sql, vals)
 
 
-def insertOnes(amountOfQueriesToGenerate, type):
+def insertOnes(amountOfQueriesToGenerate, type, pointsToGenerate):
     """
     Inserts x single instance queries into a given collection
 
     Args:
         amountOfQueriesToGenerate (number): The amount of documents to generate
         type ("point" | "linestring" | "polygon"): The datatype to generate
+        pointsToGenerate (number): The amount of points to generate for strings or polygons
     """
     mysqlSpatialData = []
 
     # Create all queries and put them in an array
     for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')',
-                                generate_one_of_datatype(type, 100, 3)))
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype(type, 100, pointsToGenerate)))
 
     # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
         config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
-    print(vals)
     mycursor.executemany(sql, vals)
 
 
@@ -132,11 +128,16 @@ def select():
         print(entry)
     print(separator_line)
 
+
 def main():
-    amount, type = command_line_parser()
+    # Get command line arguments
+    amount, type, pointsToGenerate = command_line_parser()
+
+    # Notify that the application is startinng
+    print("Starting...")
 
     # insertCollections(100)
-    insertOnes(amount, type)
+    insertOnes(amount, type, pointsToGenerate)
 
     # Needed to actually commit the changes, otherwise nothing will land in the databbase
     sqldb.commit()
@@ -144,5 +145,6 @@ def main():
     # Print resutls
     select()
     print("Done")
+
 
 main()
