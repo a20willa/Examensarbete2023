@@ -2,13 +2,24 @@ import sys
 import getopt
 
 
+help_text = '''
+    -a, --amount : number of geometries to generate (default: 1)
+    -t, --type : type of geometry to generate, must be one of 'point', 'linestring', or 'polygon' (default: '')
+    -h, --help : displays this text
+    -p, --points: the amount of points to generate for a linestring or polygon (minimal 4)
+
+    Example usage:
+    python main.py --amount 10 --type linestring --points 10
+'''
+
+
 def command_line_parser():
     amount = 1
     type = "point"
     points = 4
 
     if len(sys.argv) > 1:
-        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:h:", [
+        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:h", [
                                           "amount=", "type=", "points=", "help"])
         for currentArgument, currentValue in arguments:
             if currentArgument in ("-a", "--amount"):
@@ -47,16 +58,7 @@ def command_line_parser():
                 points = int(currentValue)
 
             elif currentArgument in ("-h", "--help"):
-                print('''
-    This script generates spatial data of a given type and amount. It takes the following optional arguments:
-
-    -a, --amount : number of geometries to generate (default: 1)
-    -t, --type : type of geometry to generate, must be one of 'point', 'linestring', or 'polygon' (default: '')
-    -h, --help :displays this text
-
-    Example usage:
-    python script.py --amount 10 --type linestring
-                ''')
+                print(help_text)
                 exit(0)
     else:
         print("No arguments were given")
