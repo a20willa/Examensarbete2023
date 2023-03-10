@@ -110,7 +110,7 @@ def main():
     amount, type, pointsToGenerate = command_line_parser()
 
     # Notify that the application is startinng
-    print("Starting...")
+    print("Starting...\n")
 
     # insertCollections(100)
     insertOnes(amount, type, pointsToGenerate)
@@ -120,7 +120,7 @@ def main():
 
     # Print resutls
     select()
-    print("Done")
+    print("\nDone")
 
 
 main()
