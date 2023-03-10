@@ -6,6 +6,7 @@ from generateData import generate_collection_of_datatype, generate_one_of_dataty
 import pymongo
 from dotenv import dotenv_values
 import mysql.connector 
+import re
 
 # Create mongodb client
 config = dotenv_values(".env")
@@ -44,11 +45,14 @@ def insertCollections(amountOfQueriesToGenerate):
     Args:
         amountOfQueriesToGenerate (number): The amount of documents to generate
     """
+    mysqlSpatialData = []
     for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData = generate_collection_of_datatype("point", 100, i, 100)
-        sql = "INSERT INTO {} VALUES (ST_GeomFromText('%s'))".format(config["mysql_table_name"])
-        vals = [(val,) for val in mysqlSpatialData]
-        mycursor.execute(sql, (vals))
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_collection_of_datatype("point", 100, 3)))
+
+    sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(config["mysql_table_name"])
+    vals = [(val,) for val in mysqlSpatialData]
+    print(vals)
+    mycursor.executemany(sql, vals)
         
 def insertOnes(amountOfQueriesToGenerate):
     """
@@ -59,10 +63,11 @@ def insertOnes(amountOfQueriesToGenerate):
     """
     mysqlSpatialData = []
     for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData.append(generate_one_of_datatype("point", 100, 100))
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype("polygon", 100, 3)))
 
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
+    print(vals)
     mycursor.executemany(sql, vals)
 
 def createSeperator(text, matchStringLength, customLength=None):

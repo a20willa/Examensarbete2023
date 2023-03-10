@@ -4,7 +4,6 @@
 
 import random
 from random import seed
-import re
 
 # Functions
 
@@ -186,8 +185,6 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
             prompt += "({} {}),".format(points[0], points[1])
         prompt += ")"
 
-        # Remove commas before closing ")"
-        prompt = re.sub(r',\s*\)', ')', prompt)
     elif datatype == "linestring":
         prompt += "{}(".format(type)
         for points in coordinates:
@@ -197,8 +194,6 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
             prompt += "),"
         prompt += ")"
 
-        # Remove commas before closing ")"
-        prompt = re.sub(r',\s*\)', ')', prompt)
     elif datatype == "polygon":
         prompt += "{}(".format(type)
         for polygon in coordinates:
