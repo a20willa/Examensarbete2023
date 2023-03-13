@@ -10,11 +10,12 @@ Options:
 -t, --type TEXT: Type of geometry to generate, must be one of 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon' (default: 'point')
 -p, --points INTEGER: The amount of points to generate for a linestring or polygon (default: 4, minimum: 4)
 -i, --instances INTEGER: The amount of instances of geometries to add in a collection type (default: 1)
+-s, --seed INTEGER: The seed used when generating
 -h, --help: Displays this text
 
 Example usage:
-python main.py --amount 10 --type linestring --points 10
-python main.py --amount 10 --type multilinestring --points 10 --instances 10
+python main.py --amount 10 --type linestring --points 10 --seed 200
+python main.py --amount 10 --type multilinestring --points 10 --instances 10 --seed 200
 '''
 
 
@@ -26,8 +27,8 @@ def command_line_parser():
     seed = 420
 
     if len(sys.argv) > 1:
-        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:i:h", [
-                                          "amount=", "type=", "points=", "instances=", "help"])
+        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:i:s:h", [
+                                          "amount=", "type=", "points=", "instances=", "seed=" "help"])
         for currentArgument, currentValue in arguments:
             if currentArgument in ("-a", "--amount"):
                 # Check if value is a number
@@ -77,6 +78,18 @@ def command_line_parser():
 
                 # Continue if value is a nubmer
                 instances = currentValue
+
+            elif currentArgument in ("-s", "--seed"):
+                # Check if value is a number
+                try:
+                    int(currentValue)
+                except ValueError:
+                    print(
+                        "Invalid value on argument '-s' or '--seed', value must be a number")
+                    exit(1)
+
+                # Continue if value is a nubmer
+                seed = currentValue
 
             elif currentArgument in ("-h", "--help"):
                 print(help_text)
