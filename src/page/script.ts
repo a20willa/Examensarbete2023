@@ -24,8 +24,7 @@ async function callGetAllEndpoint() {
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
     for (const response of responses) {
-        const data = await response.json()
-        console.log(data)
+        console.log(response)
     }
     console.log(`END - ${fetches.length} queries was runned successfully`)
 }
