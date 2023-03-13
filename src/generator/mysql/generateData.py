@@ -175,7 +175,7 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         functionToRun = generate_random_polygon_data
         type = "MultiPolygon"
 
-    for i in range(amountOfInstancesInItem): 
+    for i in range(int(amountOfInstancesInItem)): 
         coordinates.append(functionToRun(pointsToGenerate))
 
     # Check which datatype to create a query for

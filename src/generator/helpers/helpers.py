@@ -7,12 +7,14 @@ Usage: python main.py [OPTIONS]
 
 Options:
 -a, --amount INTEGER: Number of geometries to generate (default: 1)
--t, --type TEXT [REQUIRED]: Type of geometry to generate, must be one of 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon'
--h, --help: Displays this text
+-t, --type TEXT: Type of geometry to generate, must be one of 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon' (default: 'point')
 -p, --points INTEGER: The amount of points to generate for a linestring or polygon (default: 4, minimum: 4)
+-i, --instances INTEGER: The amount of instances of geometries to add in a collection type (default: 1)
+-h, --help: Displays this text
 
 Example usage:
 python main.py --amount 10 --type linestring --points 10
+python main.py --amount 10 --type multilinestring --points 10 --instances 10
 '''
 
 
@@ -20,12 +22,12 @@ def command_line_parser():
     amount = 1
     type = "point"
     points = 4
-    instances = 10
+    instances = 1
     seed = 420
 
     if len(sys.argv) > 1:
         arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:i:h", [
-                                          "amount=", "type=", "points=", "instances", "help"])
+                                          "amount=", "type=", "points=", "instances=", "help"])
         for currentArgument, currentValue in arguments:
             if currentArgument in ("-a", "--amount"):
                 # Check if value is a number
@@ -35,17 +37,9 @@ def command_line_parser():
                     print(
                         "Invalid value on argument '-a' or '--amount', value must be a number")
                     exit(1)
-            elif currentArgument in ("-p", "--points"):
-                # Check if value is a number
-                try:
-                    int(currentValue)
-                except ValueError:
-                    print(
-                        "Invalid value on argument '-p' or '--points', value must be a number")
-                    exit(1)
 
-                # Continue if value is a nubmer
                 amount = int(currentValue)
+
             elif currentArgument in ("-t", "--type"):
                 if currentValue not in ["point", "multipoint", "linestring", "multilinestring", "polygon", "multipolygon"]:
                     print(
@@ -53,6 +47,7 @@ def command_line_parser():
                     exit(1)
                 else:
                     type = currentValue
+
             elif currentArgument in ("-p", "--points"):
                 # Check if value is a number
                 try:
