@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js"></script>
     <title>Test</title>
+    <style>
+        #output_table, th, tr, td {
+            border: 1px solid black
+        }
+    </style>
 </head>
 <body>
     <h1> Test </h1>
@@ -20,5 +25,15 @@
     <button onclick="callGetAllEndpoint()">
         Run
     </button>
+    <div id="table_wrapper">
+        <table id="output_table">
+            <thead>
+                <th> Index </th>
+                <th> URL </th>
+                <th> OK </th>
+            </thead>
+            
+        </table>
+    </div>
 </body>
 </html>
