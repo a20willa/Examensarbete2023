@@ -1,5 +1,6 @@
 async function callGetAllEndpoint() {
-    console.log("START")
+    // Tell user that the test is running
+    document.getElementById("running")!.innerHTML = "Running test, please wait..."
 
     // Variables
     const fetches = []
@@ -21,10 +22,15 @@ async function callGetAllEndpoint() {
         }
     }
 
+    
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
+    // Create table
     const output_table = document.getElementById("output_table")!
+    // To show index in table
     let columRow = 0
+
+    // Go trough all resposes and append table attributes
     for (const response of responses) {
         // Create index attribute
         const index = document.createElement("td")
@@ -43,9 +49,13 @@ async function callGetAllEndpoint() {
         row.append(index, url, ok)
         output_table.appendChild(row)
 
+        // Increase the index
         columRow++
     }
 
+    // Remove test text as to leave room for the table
+    document.getElementById("running")!.remove()
+    
+    // Finally, append the table
     document.getElementById("table_wrapper")!.appendChild(output_table)
-    console.log(`END - ${fetches.length} queries was runned successfully`)
 }
