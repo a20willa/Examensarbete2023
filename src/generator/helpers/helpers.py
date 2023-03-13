@@ -30,6 +30,13 @@ def command_line_parser():
                     int(currentValue)
                 except ValueError:
                     print(
+                        "Invalid value on argument '-a' or '--amount', value must be a number")
+                    exit(1)
+            elif currentArgument in ("-p", "--points"):
+                try:
+                    int(currentValue)
+                except ValueError:
+                    print(
                         "Invalid value on argument '-p' or '--points', value must be a number")
                     exit(1)
 

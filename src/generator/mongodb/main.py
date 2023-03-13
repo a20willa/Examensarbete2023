@@ -77,6 +77,6 @@ def main():
     select()
 
     # Either of these can be called
-    print("\nDone")
+    print("\nDone!")
 
 main()
