@@ -3,13 +3,16 @@ import getopt
 
 
 help_text = '''
-    -a, --amount : number of geometries to generate (default: 1)
-    -t, --type : type of geometry to generate, must be one of 'point', 'linestring', or 'polygon' (default: '')
-    -h, --help : displays this text
-    -p, --points: the amount of points to generate for a linestring or polygon (minimal 4)
+Usage: python main.py [OPTIONS]
 
-    Example usage:
-    python main.py --amount 10 --type linestring --points 10
+Options:
+-a, --amount INTEGER: Number of geometries to generate (default: 1)
+-t, --type TEXT [REQUIRED]: Type of geometry to generate, must be one of 'point', 'linestring', or 'polygon'
+-h, --help: Displays this text
+-p, --points INTEGER: The amount of points to generate for a linestring or polygon (default: 4, minimum: 4)
+
+Example usage:
+python main.py --amount 10 --type linestring --points 10
 '''
 
 
@@ -61,7 +64,7 @@ def command_line_parser():
                 print(help_text)
                 exit(0)
     else:
-        print("No arguments were given")
+        print(help_text)
         exit(1)
 
     return amount, type, points
