@@ -5,7 +5,6 @@ import mysql from 'mysql'
 import express_mysql from 'express'
 import cors_mysql from 'cors'
 const app_mysql = express_mysql()
-const port_mysql = 3000;
 const data_mysql: connection_strings_mysql = {
   host: process.env.mysql_host! as string,
   user: process.env.mysql_user! as string,
@@ -48,6 +47,6 @@ function getRows(req: any, res: any) {
 app_mysql.get('/getAllMysql', getRows)
 
 // Listen to port 3000
-app_mysql.listen(port_mysql, () => {
+app_mysql.listen("3000", () => {
   console.log("Server started at http://localhost:3000")
 })

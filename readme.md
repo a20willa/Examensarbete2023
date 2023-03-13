@@ -4,7 +4,7 @@ This is my thesis project where MongoDB and MySQL query times will be compared u
 This README file will explain how to setup the project and start testing.
 
 ## Databases
-You need to have both a MongoDB and MySQL database up and running. 
+You need to have both a MongoDB and MySQL database up and running. You also need to configure the `.env` file to use the correct values to connect to your databases. The values are by default configured for local databases, as the testing will be on the same computer in this thesis. 
 
 ## Generating data
 Data can be generated using the python scripts inside the `generator` folder. Inside there is a folder for MongoDB and MySQL seperately, which each conatins a `main.py` script. This script uses command line arguments to control how the outputed data is generated:
