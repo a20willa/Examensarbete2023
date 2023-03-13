@@ -1,6 +1,6 @@
-#===================#
+# ===================#
 #      MongoDB      #
-#===================#
+# ===================#
 
 import random
 from random import seed
@@ -27,6 +27,7 @@ def generate_random_point_data(n):
 
     return coordinates
 
+
 def generate_random_linestring_data(num_points):
     """
     Generates a random geospatial linestring in GeoJSON format.
@@ -47,6 +48,7 @@ def generate_random_linestring_data(num_points):
         coordinates.append([longitude, latitude])
 
     return coordinates
+
 
 def generate_random_polygon_data(num_points):
     """
@@ -69,24 +71,28 @@ def generate_random_polygon_data(num_points):
 
         # We need to save the first point as the first and last point in a polygon always is the same
         if i == 0:
-            firstLine = [longitude, latitude]   
+            firstLine = [longitude, latitude]
             coordinates[0].append([longitude, latitude])
         elif i == num_points - 1:
             coordinates[0].append(firstLine)
         else:
-           coordinates[0].append([longitude, latitude])
+            coordinates[0].append([longitude, latitude])
 
     # Calculate the polygon's area (This is to make sure the polygon follows the "right-hand" rule - https://www.rfc-editor.org/rfc/rfc7946#section-3.1.6)
     area = 0
     for i in range(num_points):
         j = (i + 1) % num_points
-        area += coordinates[0][i][0] * coordinates[0][j][1] - coordinates[0][j][0] * coordinates[0][i][1]
+        area += (
+            coordinates[0][i][0] * coordinates[0][j][1]
+            - coordinates[0][j][0] * coordinates[0][i][1]
+        )
 
     # If the area is negative, reverse the order of the vertices
     if area < 0:
         coordinates[0].reverse()
 
     return coordinates
+
 
 def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
     """
@@ -96,7 +102,7 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
         datatype ("point" | "linestring" | "polygon"): The datatype to generate
         randomSeed (number): The seed to use for random generation
         pointsToGenerate (number): The amount of points to generate for either a linestring or a polygon
-        
+
     Returns:
         str: GeoJSON string representing the generated collection
     """
@@ -117,34 +123,20 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
         type = "Polygon"
 
     # Create the GeoJSON feature for the polygon
-    polygon_feature = {
-        "type": "Feature",
-        "geometry": {
-            "type": type,
-            "coordinates":  functionToRun(pointsToGenerate)
-        },
-        "properties": {}
-    }
-
-    # Append the feature to the features list
-    features.append(polygon_feature)
-
-    # Create the GeoJSON object
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    geojson = {"type": type, "coordinates": functionToRun(pointsToGenerate)}
 
     # Return the GeoJSON string
     return json.dumps(geojson)
-    
 
-def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSeed, pointsToGenerate):
+
+def generate_collection_of_datatype(
+    datatype, amountOfInstancesInItem, randomSeed, pointsToGenerate
+):
     """
     Generates a collection of either geospatial points, linestrings, or polygons in GeoJSON format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
 
     Args:
-        datatype ("point" | "linestring" | "polygon"): The datatype to generate
+        datatype ("multipoint" | "multilinestring" | "multipolygon"): The datatype to generate
         amountOfInstancesInItem (number): The amount of point, linestring or polygon instances to insert into the multipoint, multilinestring or multipolygon
         randomSeed (number): The seed to use for random generation
         pointsToGenerate (number): The amount of points to generate for either a linestring or a polygon
@@ -160,37 +152,21 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
     type = ""
 
     # Check which datatype to create a query for
-    if datatype == "point":
+    if datatype == "multipoint":
         functionToRun = generate_random_point_data
         type = "MultiPoint"
-    elif datatype == "linestring":
+    elif datatype == "multilinestring":
         functionToRun = generate_random_linestring_data
         type = "MultiLineString"
-    elif datatype == "polygon":
+    elif datatype == "multipolygon":
         functionToRun = generate_random_polygon_data
         type = "MultiPolygon"
 
-    for i in range(amountOfInstancesInItem): 
+    for i in range(amountOfInstancesInItem):
         collection.append(functionToRun(pointsToGenerate))
 
     # Create the GeoJSON feature for the polygon
-    polygon_feature = {
-        "type": "Feature",
-        "geometry": {
-            "type": type,
-            "coordinates": collection
-        },
-        "properties": {}
-    }
-
-    # Append the feature to the features list
-    features.append(polygon_feature)
-
-    # Create the GeoJSON object
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    geojson = {"type": type, "coordinates": collection}
 
     # Return the GeoJSON string
     return json.dumps(geojson)

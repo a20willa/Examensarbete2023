@@ -1,6 +1,6 @@
-#===================#
+# ===================#
 #       MySQL       #
-#===================#
+# ===================#
 
 import random
 from random import seed
@@ -83,8 +83,10 @@ def generate_random_polygon_data(num_points):
     area = 0
     for i in range(num_points):
         j = (i + 1) % num_points
-        area += coordinates[0][i][0] * coordinates[0][j][1] - \
-            coordinates[0][j][0] * coordinates[0][i][1]
+        area += (
+            coordinates[0][i][0] * coordinates[0][j][1]
+            - coordinates[0][j][0] * coordinates[0][i][1]
+        )
 
     # If the area is negative, reverse the order of the vertices
     if area < 0:
@@ -144,7 +146,9 @@ def generate_one_of_datatype(datatype, randomSeed, pointsToGenerate):
     return prompt
 
 
-def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSeed, pointsToGenerate):
+def generate_collection_of_datatype(
+    datatype, amountOfInstancesInItem, randomSeed, pointsToGenerate
+):
     """
     Generates a collection of either geospatial points, linestrings, or polygons in MySQL format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
 
@@ -175,7 +179,7 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         functionToRun = generate_random_polygon_data
         type = "MultiPolygon"
 
-    for i in range(int(amountOfInstancesInItem)): 
+    for i in range(int(amountOfInstancesInItem)):
         coordinates.append(functionToRun(pointsToGenerate))
 
     # Check which datatype to create a query for

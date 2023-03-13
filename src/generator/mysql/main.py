@@ -11,7 +11,7 @@ import re
 import sys
 
 # Import helper functions
-sys.path.insert(1, 'src/generator/helpers')
+sys.path.insert(1, "src/generator/helpers")
 from helpers import command_line_parser, createSeperator
 
 # Create mongodb client
@@ -21,7 +21,7 @@ sqldb = mysql.connector.connect(
     host=config["mysql_host"],
     user=config["mysql_user"],
     password=config["mysql_user_password"],
-    database=config["mysql_database"]
+    database=config["mysql_database"],
 )
 
 # Creates the cursor needed to execute queries
@@ -29,7 +29,6 @@ mycursor = sqldb.cursor()
 
 # Drop the table as it needs to be empty before adding new data
 try:
-    #
     sql = "DROP TABLE IF EXISTS {}".format(config["mysql_table_name"])
     mycursor.execute(sql)
 except Exception as e:
@@ -38,7 +37,8 @@ except Exception as e:
 # Create the table with a id and a single column for the geospatial data
 try:
     sql = "CREATE TABLE {} (id INT NOT NULL AUTO_INCREMENT, g GEOMETRY, PRIMARY KEY (id))".format(
-        config["mysql_table_name"])
+        config["mysql_table_name"]
+    )
     mycursor.execute(sql)
 except Exception as e:
     print(e)
@@ -52,7 +52,7 @@ def insertCollections(amount, type, points, instances, seed):
 
     Args:
         amount (number): The amount of geometries to generate
-        type ("point" | "multipoint" | "linestring" | "multilinestring" | "polygon" | "multipolygon"): The datatype to generate
+        type ("multipoint" | "multilinestring" "multipolygon"): The datatype to generate
         points (number): The amount of points to generate for strings or polygons
         instances (number): The amount of geometry instances to generate within the collection
         seed (number): The seed for the generation
@@ -61,12 +61,18 @@ def insertCollections(amount, type, points, instances, seed):
 
     # Create all queries and put them in an array
     for i in range(amount):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')',
-                                generate_collection_of_datatype(type, instances, seed, points)))
+        mysqlSpatialData.append(
+            re.sub(
+                r",\s*\)",
+                ")",
+                generate_collection_of_datatype(type, instances, seed, points),
+            )
+        )
 
     # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
-        config["mysql_table_name"])
+        config["mysql_table_name"]
+    )
     vals = [(val,) for val in mysqlSpatialData]
     mycursor.executemany(sql, vals)
 
@@ -85,11 +91,14 @@ def insertOnes(amount, type, points, seed):
 
     # Create all queries and put them in an array
     for i in range(amount):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype(type, seed, points)))
+        mysqlSpatialData.append(
+            re.sub(r",\s*\)", ")", generate_one_of_datatype(type, seed, points))
+        )
 
     # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
-        config["mysql_table_name"])
+        config["mysql_table_name"]
+    )
     vals = [(val,) for val in mysqlSpatialData]
     mycursor.executemany(sql, vals)
 
@@ -101,8 +110,7 @@ def select():
     sql = "SELECT ST_AsText(g) from {}".format(config["mysql_table_name"])
     mycursor.execute(sql)
     result = mycursor.fetchall()
-    separator, separator_line = createSeperator(
-        "Results", max(result, key=len), 50)
+    separator, separator_line = createSeperator("Results", max(result, key=len), 50)
     print(separator)
     for entry in result:
         print(entry)
@@ -116,9 +124,8 @@ def main():
     # Notify that the application is startinng
     print("Starting...\n")
 
-
     # Check type and run correct function
-    if type == "point" or type == "linestring" or type =="polygon":
+    if type == "point" or type == "linestring" or type == "polygon":
         insertOnes(amount, type, points, seed)
     else:
         insertCollections(amount, type, points, instances, seed)
@@ -128,7 +135,7 @@ def main():
 
     # Print resutls
     select()
-    print("\nDone")
+    print("\nDone!")
 
 
 main()

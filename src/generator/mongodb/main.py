@@ -24,28 +24,35 @@ except pymongo.errors.ServerSelectionTimeoutError:
     print("Could not connect to MongoDB database, is it running?")
     exit(1)
 
-def insertCollections(amountOfDocumentsToGenerate, type, pointsToGenerate):
+def insertCollections(amount, type, points, instances, seed):
     """
-    Inserts x collection instance documents into a given collection
+    Inserts x collection instances queries into a given collection
 
     Args:
-        amountOfDocumentsToGenerate (number): The amount of documents to generate
+        amount (number): The amount of geometries to generate
+        type ("point" | "multipoint" | "linestring" | "multilinestring" | "polygon" | "multipolygon"): The datatype to generate
+        points (number): The amount of points to generate for strings or polygons
+        instances (number): The amount of geometry instances to generate within the collection
+        seed (number): The seed for the generation
     """
-    for i in range(amountOfDocumentsToGenerate):
+    for i in range(amount):
         data = json.loads(generate_collection_of_datatype(
-            type, 100, i, pointsToGenerate))
+            type, instances, seed, points))
         mycol.insert_one(data)
 
 
-def insertOnes(amountOfDocumentsToGenerate, type, pointsToGenerate):
+def insertOnes(amount, type, points, seed):
     """
-    Inserts x single instance documents into a given collection
+    Inserts x single instance queries into a given collection
 
     Args:
-        amountOfDocumentsToGenerate (number): The amount of documents to generate
+        amount (number): The amount of geometries to generate
+        type ("point" | "linestring" | "polygon"): The datatype to generate
+        points (number): The amount of points to generate for strings or polygons
+        seed (number): The seed for the generation
     """
-    for i in range(amountOfDocumentsToGenerate):
-        data = json.loads(generate_one_of_datatype(type, i, pointsToGenerate))
+    for i in range(amount):
+        data = json.loads(generate_one_of_datatype(type, seed, points))
         mycol.insert_one(data)
 
 
@@ -63,17 +70,19 @@ def select():
 
 def main():
     # Get command line arguments
-    amount, type, pointsToGenerate = command_line_parser()
+    amount, type, points, instances, seed  = command_line_parser()
 
     # Notify that the application is startinng
     print("Starting...\n")
 
-    # insertCollections(100)
-    insertOnes(amount, type, pointsToGenerate)
-
+     # Check type and run correct function
+    if type == "point" or type == "linestring" or type =="polygon":
+        insertOnes(amount, type, points, seed)
+    else:
+        insertCollections(amount, type, points, instances, seed)
+        
+    # Print results
     select()
-
-    # Either of these can be called
     print("\nDone!")
 
 main()
