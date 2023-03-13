@@ -7,7 +7,7 @@ Usage: python main.py [OPTIONS]
 
 Options:
 -a, --amount INTEGER: Number of geometries to generate (default: 1)
--t, --type TEXT [REQUIRED]: Type of geometry to generate, must be one of 'point', 'linestring', or 'polygon'
+-t, --type TEXT [REQUIRED]: Type of geometry to generate, must be one of 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon'
 -h, --help: Displays this text
 -p, --points INTEGER: The amount of points to generate for a linestring or polygon (default: 4, minimum: 4)
 
@@ -20,12 +20,15 @@ def command_line_parser():
     amount = 1
     type = "point"
     points = 4
+    instances = 10
+    seed = 420
 
     if len(sys.argv) > 1:
-        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:h", [
-                                          "amount=", "type=", "points=", "help"])
+        arguments, values = getopt.getopt(sys.argv[1:], "a:t:p:i:h", [
+                                          "amount=", "type=", "points=", "instances", "help"])
         for currentArgument, currentValue in arguments:
             if currentArgument in ("-a", "--amount"):
+                # Check if value is a number
                 try:
                     int(currentValue)
                 except ValueError:
@@ -33,6 +36,7 @@ def command_line_parser():
                         "Invalid value on argument '-a' or '--amount', value must be a number")
                     exit(1)
             elif currentArgument in ("-p", "--points"):
+                # Check if value is a number
                 try:
                     int(currentValue)
                 except ValueError:
@@ -43,9 +47,9 @@ def command_line_parser():
                 # Continue if value is a nubmer
                 amount = int(currentValue)
             elif currentArgument in ("-t", "--type"):
-                if currentValue not in ["point", "linestring", "polygon"]:
+                if currentValue not in ["point", "multipoint", "linestring", "multilinestring", "polygon", "multipolygon"]:
                     print(
-                        "Invalid option on argument '-t' or '--type', must be either 'point', 'linestring' or 'polygon'")
+                        "Invalid option on argument '-t' or '--type', must be either 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon'")
                     exit(1)
                 else:
                     type = currentValue
@@ -67,6 +71,18 @@ def command_line_parser():
                 # Continue if value is a nubmer
                 points = int(currentValue)
 
+            elif currentArgument in ("-i", "--instances"):
+                # Check if value is a number
+                try:
+                    int(currentValue)
+                except ValueError:
+                    print(
+                        "Invalid value on argument '-i' or '--instances', value must be a number")
+                    exit(1)
+
+                # Continue if value is a nubmer
+                instances = currentValue
+
             elif currentArgument in ("-h", "--help"):
                 print(help_text)
                 exit(0)
@@ -74,7 +90,8 @@ def command_line_parser():
         print(help_text)
         exit(1)
 
-    return amount, type, points
+    return amount, type, points, instances, seed
+
 
 def createSeperator(text, matchStringLength, customLength=None):
     """

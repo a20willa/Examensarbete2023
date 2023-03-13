@@ -149,7 +149,7 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
     Generates a collection of either geospatial points, linestrings, or polygons in MySQL format, effectively simulating a multipoint, multilinestring, and multipolygon, respectively.
 
     Args:
-        datatype ("point" | "linestring" | "polygon"): The datatype to generate
+        datatype ("multipoint" | "multilinestring" | "multipolygon"): The datatype to generate
         amountOfInstancesInItem (number): The amount of point, linestring or polygon instances to insert into the multipoint, multilinestring or multipolygon
         randomSeed (number): The seed to use for random generation
         pointsToGenerate (number): The amount of points to generate for either a linestring or a polygon
@@ -165,13 +165,13 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
     coordinates = []
 
     # Get the data type
-    if datatype == "point":
+    if datatype == "multipoint":
         functionToRun = generate_random_point_data
         type = "MultiPoint"
-    elif datatype == "linestring":
+    elif datatype == "multilinestring":
         functionToRun = generate_random_linestring_data
         type = "MultiLineString"
-    elif datatype == "polygon":
+    elif datatype == "multipolygon":
         functionToRun = generate_random_polygon_data
         type = "MultiPolygon"
 
@@ -179,13 +179,13 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
         coordinates.append(functionToRun(pointsToGenerate))
 
     # Check which datatype to create a query for
-    if datatype == "point":
+    if datatype == "multipoint":
         prompt += "{}(".format(type)
         for points in coordinates:
             prompt += "({} {}),".format(points[0], points[1])
         prompt += ")"
 
-    elif datatype == "linestring":
+    elif datatype == "multilinestring":
         prompt += "{}(".format(type)
         for points in coordinates:
             prompt += "("
@@ -194,7 +194,7 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
             prompt += "),"
         prompt += ")"
 
-    elif datatype == "polygon":
+    elif datatype == "multipolygon":
         prompt += "{}(".format(type)
         for polygon in coordinates:
             prompt += "("
@@ -205,5 +205,8 @@ def generate_collection_of_datatype(datatype, amountOfInstancesInItem, randomSee
                 prompt = prompt[:-1] + "),"
             prompt = prompt[:-1] + "),"
         prompt = prompt[:-1] + ")"
+
+    else:
+        exit(1)
 
     return prompt

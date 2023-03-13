@@ -46,42 +46,47 @@ except Exception as e:
 # Create functions to insert data into MySQL
 
 
-def insertCollections(amountOfQueriesToGenerate, type):
+def insertCollections(amount, type, pointsToGenerate, instances, seed):
     """
-    Inserts x collection instance documents into a given collection
+    Inserts x collection instances queries into a given collection
 
     Args:
-        amountOfQueriesToGenerate (number): The amount of documents to generate
+        amount (number): The amount of geometries to generate
+        type ("point" | "multipoint" | "linestring" | "multilinestring" | "polygon" | "multipolygon"): The datatype to generate
+        pointsToGenerate (number): The amount of points to generate for strings or polygons
+        instances (number): The amount of geometry instances to generate within the collection
+        seed (number): The seed for the generation
     """
     mysqlSpatialData = []
 
     # Create all queries and put them in an array
-    for i in range(amountOfQueriesToGenerate):
+    for i in range(amount):
         mysqlSpatialData.append(re.sub(r',\s*\)', ')',
-                                generate_collection_of_datatype(type, 100, 3)))
+                                generate_collection_of_datatype(type, instances, seed, pointsToGenerate)))
 
+    print(mysqlSpatialData)
     # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
         config["mysql_table_name"])
     vals = [(val,) for val in mysqlSpatialData]
-    print(vals)
     mycursor.executemany(sql, vals)
 
 
-def insertOnes(amountOfQueriesToGenerate, type, pointsToGenerate):
+def insertOnes(amount, type, pointsToGenerate, seed):
     """
     Inserts x single instance queries into a given collection
 
     Args:
-        amountOfQueriesToGenerate (number): The amount of documents to generate
+        amount (number): The amount of geometries to generate
         type ("point" | "linestring" | "polygon"): The datatype to generate
         pointsToGenerate (number): The amount of points to generate for strings or polygons
+        seed (number): The seed for the generation
     """
     mysqlSpatialData = []
 
     # Create all queries and put them in an array
-    for i in range(amountOfQueriesToGenerate):
-        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype(type, 100, pointsToGenerate)))
+    for i in range(amount):
+        mysqlSpatialData.append(re.sub(r',\s*\)', ')', generate_one_of_datatype(type, seed, pointsToGenerate)))
 
     # Run the queries using the "executemany()" function
     sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
@@ -107,13 +112,17 @@ def select():
 
 def main():
     # Get command line arguments
-    amount, type, pointsToGenerate = command_line_parser()
+    amount, type, pointsToGenerate, instances, seed = command_line_parser()
 
     # Notify that the application is startinng
     print("Starting...\n")
 
-    # insertCollections(100)
-    insertOnes(amount, type, pointsToGenerate)
+
+    # Check type and run correct function
+    if type == "point" or type == "linestring" or type =="polygon":
+        insertOnes(amount, type, pointsToGenerate, seed)
+    else:
+        insertCollections(amount, type, pointsToGenerate, instances, seed)
 
     # Needed to actually commit the changes, otherwise nothing will land in the databbase
     sqldb.commit()

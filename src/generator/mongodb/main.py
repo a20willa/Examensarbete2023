@@ -24,9 +24,6 @@ except pymongo.errors.ServerSelectionTimeoutError:
     print("Could not connect to MongoDB database, is it running?")
     exit(1)
 
-# Functions
-
-
 def insertCollections(amountOfDocumentsToGenerate, type, pointsToGenerate):
     """
     Inserts x collection instance documents into a given collection
