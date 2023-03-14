@@ -27,6 +27,19 @@ python src/generator/mysql/main.py --amount 10 --type linestring --points 10 --s
 python src/generator/mongodb/main.py --amount 10 --type multilinestring --points 10 --instances 10 --seed 200
 ```
 
+### Values for testing
+These are the values which will be used to generate and insert data into both MySQL and MongoDB. Note that the `--type` parameter will be changed between tests.
+
+#### Pilot Study
+The pilot study uses the following query:
+```
+python3 src/generator/mysql/main.py --amount 100 --type linestring --points 20 --seed 200
+```
+#### Real Tests
+The real tests uses the following query:
+```
+python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 --seed 200
+```
 
 
 ## NodeJS
