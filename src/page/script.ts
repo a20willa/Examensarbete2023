@@ -11,7 +11,7 @@ async function callGetAllEndpoint() {
     for (var i = 0; i < Number(itterationsInput.value); i++) {
         try {
             fetches.push(await fetch(
-                'http://127.0.0.1:3000/' + database +'?cache=' + Math.random(),
+                'http://127.0.0.1:3000/' + database + '?cache=' + Math.random(),
                 {
                     method: 'GET',
                     mode: 'cors',
@@ -22,7 +22,7 @@ async function callGetAllEndpoint() {
         }
     }
 
-    
+
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
     // Create table
@@ -32,9 +32,20 @@ async function callGetAllEndpoint() {
     tbody.innerHTML = ""
     // To show index in table
     let columRow = 0
+    // Error value to say that something failed
+    let err = false
 
     // Go trough all resposes and append table attributes
     for (const response of responses) {
+        let json = ""
+
+        try {
+            json = JSON.stringify(await response.json())
+        } catch (e) {
+            err = true
+            break;
+        }
+
         // Create index attribute
         const index = document.createElement("td")
         index.innerText = String(columRow)
@@ -47,29 +58,37 @@ async function callGetAllEndpoint() {
         const ok = document.createElement("td")
         ok.innerText = String(response.ok)
 
-        // Create ok attribute
+        // Create data attribute
         const data = document.createElement("td")
         const dataText = document.createElement("textarea")
         data.appendChild(dataText)
 
-        try {
-            dataText.value = String(JSON.stringify(await response.json()))
-        } catch(e) {
-            dataText.value = "Are you using the correct database?"
+        // Create amount of items attriubte
+        const amountOfItems = document.createElement("td")
+        amountOfItems.innerText = JSON.parse(json).response.length
+
+        if (String(json).length < 300) {
+            dataText.value = String(json)
+        } else {
+            dataText.value = "Too much data to display"
         }
-        
+
         // Create row in table
         const row = document.createElement("tr")
-        row.append(index, url, ok, data)
+        row.append(index, url, ok, data, amountOfItems)
         tbody.appendChild(row)
 
         // Increase the index
         columRow++
     }
 
-    // Remove test text as to leave room for the table
-    document.getElementById("running")!.innerHTML = "Done!"
-    
+    if(err) {
+        document.getElementById("running")!.innerHTML = "An error occured (are you using the correct database?)"
+    } else {
+        // Remove test text as to leave room for the table
+        document.getElementById("running")!.innerHTML = "Done!"
+    }
+
     // Finally, append the table
     document.getElementById("table_wrapper")!.appendChild(output_table)
 }
