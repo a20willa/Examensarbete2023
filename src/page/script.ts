@@ -51,7 +51,12 @@ async function callGetAllEndpoint() {
         const data = document.createElement("td")
         const dataText = document.createElement("textarea")
         data.appendChild(dataText)
-        dataText.value = String(JSON.stringify(await response.json()))
+
+        try {
+            dataText.value = String(JSON.stringify(await response.json()))
+        } catch(e) {
+            dataText.value = "Are you using the correct database?"
+        }
         
         // Create row in table
         const row = document.createElement("tr")

@@ -3,7 +3,9 @@ import getopt
 
 
 help_text = '''
-Usage: python main.py [OPTIONS]
+This script generates data and inserts it into the target database. This script must be runned from the root folder of this project.
+
+Usage: python src/generator/<mysql||mongodb>/main.py [OPTIONS]
 
 Options:
 -a, --amount INTEGER: Number of geometries to generate (default: 1)
@@ -14,8 +16,8 @@ Options:
 -h, --help: Displays this text
 
 Example usage:
-python main.py --amount 10 --type linestring --points 10 --seed 200
-python main.py --amount 10 --type multilinestring --points 10 --instances 10 --seed 200
+python src/generator/mysql/main.py --amount 10 --type linestring --points 10 --seed 200
+python src/generator/mongodb/main.py --amount 10 --type multilinestring --points 10 --instances 10 --seed 200
 '''
 
 

@@ -30,10 +30,12 @@ app_mongodb.get('/getAllMongodb', async (req: any, res: any) => {
     // Establish and verify connection
     const cursor = dbo.collection(String(data_mongodb.collection_name)).find()
     res.send({
-      "response": await cursor.toArray()
+      response: await cursor.toArray()
     })
   } catch (e) {
-    console.log(e)
+    res.send({
+      response: "err"
+    })
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
