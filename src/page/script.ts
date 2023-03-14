@@ -44,9 +44,15 @@ async function callGetAllEndpoint() {
         const ok = document.createElement("td")
         ok.innerText = String(response.ok)
 
+        // Create ok attribute
+        const data = document.createElement("td")
+        const dataText = document.createElement("textarea")
+        data.appendChild(dataText)
+        dataText.value = String(JSON.stringify(await response.json()))
+        
         // Create row in table
         const row = document.createElement("tr")
-        row.append(index, url, ok)
+        row.append(index, url, ok, data)
         output_table.appendChild(row)
 
         // Increase the index
