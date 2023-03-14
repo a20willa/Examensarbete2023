@@ -11,7 +11,7 @@ async function callGetAllEndpoint() {
     for (var i = 0; i < Number(itterationsInput.value); i++) {
         try {
             fetches.push(await fetch(
-                'http://127.0.0.1:3000/' + database,
+                'http://127.0.0.1:3000/' + database +'?cache=' + Math.random(),
                 {
                     method: 'GET',
                     mode: 'cors',
@@ -32,8 +32,6 @@ async function callGetAllEndpoint() {
     tbody.innerHTML = ""
     // To show index in table
     let columRow = 0
-
-    console.log(responses)
 
     // Go trough all resposes and append table attributes
     for (const response of responses) {
