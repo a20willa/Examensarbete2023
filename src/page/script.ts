@@ -67,7 +67,8 @@ async function callGetAllEndpoint() {
         const amountOfItems = document.createElement("td")
         amountOfItems.innerText = JSON.parse(json).response.length
 
-        if (String(json).length < 300) {
+        // Dont show data if there is too much
+        if (String(json).length < 9999) {
             dataText.value = String(json)
         } else {
             dataText.value = "Too much data to display"
