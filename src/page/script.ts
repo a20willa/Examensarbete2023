@@ -33,6 +33,8 @@ async function callGetAllEndpoint() {
     // To show index in table
     let columRow = 0
 
+    console.log(responses)
+
     // Go trough all resposes and append table attributes
     for (const response of responses) {
         // Create index attribute
