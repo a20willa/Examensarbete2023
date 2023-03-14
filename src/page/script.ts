@@ -27,6 +27,9 @@ async function callGetAllEndpoint() {
     const responses = await Promise.all(fetches)
     // Create table
     const output_table = document.getElementById("output_table")!
+    // Get the tbody and reset it
+    const tbody = document.getElementById("tbody")!
+    tbody.innerHTML = ""
     // To show index in table
     let columRow = 0
 
@@ -53,14 +56,14 @@ async function callGetAllEndpoint() {
         // Create row in table
         const row = document.createElement("tr")
         row.append(index, url, ok, data)
-        output_table.appendChild(row)
+        tbody.appendChild(row)
 
         // Increase the index
         columRow++
     }
 
     // Remove test text as to leave room for the table
-    document.getElementById("running")!.remove()
+    document.getElementById("running")!.innerHTML = "Done!"
     
     // Finally, append the table
     document.getElementById("table_wrapper")!.appendChild(output_table)
