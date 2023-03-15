@@ -74,7 +74,7 @@ This section will provide info on how to setup the testing environment.
 1. Import the MongoDB public GPG key:
    `wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -`
 2. Create a MongoDB list file:
-   `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt sources.list.d/mongodb-org-6.0.list`
+   `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list`
 3. Reload the package database:
    `sudo apt-get update`
 4. Install MongoDB (6.0.4):
