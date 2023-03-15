@@ -4,7 +4,6 @@
 
 # Import needed dependencies
 from generateData import generate_collection_of_datatype, generate_one_of_datatype
-import pymongo
 from dotenv import dotenv_values
 import mysql.connector
 import re
@@ -16,7 +15,6 @@ from helpers import command_line_parser, createSeperator
 
 # Create mongodb client
 config = dotenv_values(".env")
-myclient = pymongo.MongoClient()
 sqldb = mysql.connector.connect(
     host=config["mysql_host"],
     user=config["mysql_user"],
