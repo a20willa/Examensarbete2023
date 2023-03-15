@@ -12,7 +12,7 @@ const data_mongodb: connection_strings_mongodb = {
 }
 
 // Create MongoDB client
-const client = new MongoClient(data_mongodb.host)
+const client = new MongoClient(data_mongodb.host, {})
 
 // Use CORS to fetch via javascript
 app_mongodb.use(cors_mongodb());
