@@ -7,11 +7,14 @@ This README file will explain how to setup the project and start testing.
 You need to have both a MongoDB and MySQL database up and running. You also need to configure the `.env` file to use the correct values to connect to your databases. The values are by default configured for local databases, as the testing will be on the same computer in this thesis. 
 
 ## Generating data
-Data can be generated using the python scripts inside the `generator` folder. Inside there is a folder for MongoDB and MySQL seperately, which each conatins a `main.py` script. This script uses command line arguments to control how the outputed data is generated:
+Firstly, install all dependencies:
+```
+pip install -r requirements.txt
+```
+
+Data can thne be generated using the python scripts inside the `generator` folder. Inside there is a folder for MongoDB and MySQL seperately, which each conatins a `main.py` script. This script uses command line arguments to control how the outputed data is generated:
 
 ```
-This script generates data and inserts it into the target database. This script must be runned from the root folder of this project.
-
 Usage: python src/generator/<mysql | mongodb>/main.py [OPTIONS]
 
 Options:

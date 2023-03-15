@@ -3,8 +3,6 @@ import getopt
 
 
 help_text = '''
-This script generates data and inserts it into the target database. This script must be runned from the root folder of this project.
-
 Usage: python src/generator/<mysql | mongodb>/main.py [OPTIONS]
 
 Options:
