@@ -99,13 +99,14 @@ This section will explain how to use to use both databases in Node.js
 1. Run the following commands
    1. `sudo mysql –u root `
    2. `CREATE USER 'a20willa'@'localhost' IDENTIFIED BY 'mysql123'`
-   3. ```GRANT ALL ON `mysql_database`.* TO 'a20willa'@'localhost';```
-   4. `ALTER USER 'a20willa'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql123';`
-   5. `USE mysql_database`
-   6. ```
+   3. `CREATE DATABASE mysql_database`
+   4. ```GRANT ALL ON `mysql_database`.* TO 'a20willa'@'localhost';```
+   5. `ALTER USER 'a20willa'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql123';`
+   6. `USE mysql_database`
+   7. ```
       CREATE TABLE spatial_data_testing (
-        id int primary key
-        g geometry
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        g GEOMETRY
       );
       ```
 
