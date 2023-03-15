@@ -78,7 +78,7 @@ This section will provide info on how to setup the testing environment.
 3. Reload the package database:
    `sudo apt-get update`
 4. Install MongoDB (6.0.4):
-   `sudo apt-get install -y mongodb-org=6.0.4 mongodb-org-server=6.0.4 mongodb-org-shell=6.0.4 mongodb-org-mongos=6.0.4 mongodb-org-tools=6.0.4`
+   `sudo apt-get install -y mongodb-org=6.0.4 mongodb-org-database=6.0.4 mongodb-org-server=6.0.4 mongodb-org-mongos=6.0.4 mongodb-org-tools=6.0.4`
 5. Once installed, run the following commands to fix permission errors
 6. `sudo chown -R mongodb:mongodb /var/lib/mongodb`
 7. `sudo chown mongodb:mongodb /tmp/mongodb-27017.sock`
