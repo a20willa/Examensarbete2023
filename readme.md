@@ -4,7 +4,7 @@ This is my thesis project where MongoDB and MySQL query times will be compared u
 This README file will explain how to setup the project and start testing.
 
 ## Databases
-You need to have both a MongoDB and MySQL database up and running. You also need to configure the `.env` file to use the correct values to connect to your databases. The values are by default configured for local databases, as the testing will be on the same computer in this thesis. 
+You need to have both a MongoDB and MySQL database up and running. You also need to configure the `.env` file to use the correct values to connect to your databases. The values are by default configured for local databases, as the testing will be on the same computer in this thesis. If you follow the instruction in the markdown file in the installation folder you should not have to change anything. 
 
 ## Generating data
 Firstly, install all dependencies:
@@ -46,7 +46,7 @@ python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 
 
 
 ## NodeJS
-This project uses NodeJS as the server to host the application and the databases. Therefore, it will need to be installed. After installing NodeJS, open a terminal and cd to the root folder of this respotory, then install dependencies using:
+This project uses NodeJS as the server to host the application and the databases. Therefore, it will need to be installed, which can be done with `sudo apt install nodejs`. You also need to have npm, so install it using `sudo apt install npm`. After installing NodeJS and npm, open a terminal and cd to the root folder of this respotory, then install dependencies using:
 ```
 > npm i
 ```
