@@ -116,3 +116,9 @@ This section will explain how to use to use both databases in Node.js
         g GEOMETRY
       );
       ```
+
+### MongoDB
+1. Run the following commands:
+   1. `mongosh --host localhost:27017`
+   2. `use mongodb_database`
+   3. `db.createCollection("spatial_data_testing")`
