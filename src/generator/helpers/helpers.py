@@ -10,7 +10,7 @@ Options:
 -t, --type TEXT: Type of geometry to generate, must be one of 'point', 'multipoint', 'linestring', 'multilinestring', 'polygon' or 'multipolygon' (default: 'point')
 -p, --points INTEGER: The amount of points to generate for a linestring or polygon (default: 4, minimum: 4)
 -i, --instances INTEGER: The amount of instances of geometries to add in a collection type (default: 1)
--s, --seed INTEGER: The seed used when generating
+-s, --seed INTEGER: The seed used when generating (default: 420)
 -h, --help: Displays this text
 
 Example usage:
