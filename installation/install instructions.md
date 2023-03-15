@@ -29,7 +29,7 @@ This section will present the components and software used.
 | Version       | #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022         |
 | C Library     | GNU C Library / (Ubuntu GLIBC 2.35-0ubuntu3.1) 2.35 |
 
-### MongoDB [1]
+### MongoDB
 
 | Specification | Description              |
 | ------------- | ------------------------ |
@@ -71,12 +71,19 @@ This section will provide info on how to setup the testing environment.
 
 ### Setup MongoDB
 
-1. Install the MongoDB community server according to specs in the “specifications” chapter of this document
-2. Once installed, run the following commands to fix permission errors
-3. `sudo chown -R mongodb:mongodb /var/lib/mongodb`
-4. `sudo chown mongodb:mongodb /tmp/mongodb-27017.sock`
-5. `sudo service mongod restart`
-6. Check if MongoDB is running with `service mongod status`
+1. Import the MongoDB public GPG key:
+   `wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -`
+2. Create a MongoDB list file:
+   `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt sources.list.d/mongodb-org-6.0.list`
+3. Reload the package database:
+   `sudo apt-get update`
+4. Install MongoDB (6.0.4):
+   `sudo apt-get install -y mongodb-org=6.0.4 mongodb-org-server=6.0.4 mongodb-org-shell=6.0.4 mongodb-org-mongos=6.0.4 mongodb-org-tools=6.0.4`
+5. Once installed, run the following commands to fix permission errors
+6. `sudo chown -R mongodb:mongodb /var/lib/mongodb`
+7. `sudo chown mongodb:mongodb /tmp/mongodb-27017.sock`
+8. `sudo service mongod restart`
+9. Check if MongoDB is running with `service mongod status`
 
 ### Setup MySQL
 
@@ -109,9 +116,3 @@ This section will explain how to use to use both databases in Node.js
         g GEOMETRY
       );
       ```
-
-## Footnotes
-
-[1]
-
-![](images/image6.png)
