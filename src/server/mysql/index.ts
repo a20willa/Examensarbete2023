@@ -6,12 +6,12 @@ import express_mysql from 'express'
 import cors_mysql from 'cors'
 const app_mysql = express_mysql()
 const data_mysql: connection_strings_mysql = {
-  host: process.env.mysql_host! as string,
-  user: process.env.mysql_user! as string,
-  user_password: process.env.mysql_user_password! as string,
-  database: process.env.mysql_database! as string,
-  port: process.env.mysql_port! as unknown as number,
-  table_name: process.env.mysql_table_name! as string,
+  host: process.env.mysql_host as string ?? "127.0.0.1",
+  user: process.env.mysql_user as string ?? "a20willa",
+  user_password: process.env.mysql_user_password as string ?? "mysql123",
+  database: process.env.mysql_database as string ?? "mysql_database",
+  port: process.env.mysql_port! as unknown as number ?? 3306,
+  table_name: process.env.mysql_table_name as string ?? "spatial_data_testing",
 }
 
 // Create MySQL connection

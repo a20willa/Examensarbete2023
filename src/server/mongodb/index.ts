@@ -6,9 +6,9 @@ import express_mongodb from 'express';
 import cors_mongodb from 'cors';
 const app_mongodb = express_mongodb()
 const data_mongodb: connection_strings_mongodb = {
-  host: process.env.mongodb_host! as string,
-  database: process.env.mongodb_database! as string,
-  collection_name: process.env.mongodb_collection_name! as string
+  host: process.env.mongodb_host as string ?? "mongodb://localhost:27017",
+  database: process.env.mongodb_database! as string ?? "mongodb_database",
+  collection_name: process.env.mongodb_collection_name as string ?? "spatial_data_testing"
 }
 
 // Create MongoDB client
@@ -38,7 +38,7 @@ app_mongodb.get('/getAllMongodb', async (req: any, res: any) => {
     })
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    client.close();
   }
 })
 
