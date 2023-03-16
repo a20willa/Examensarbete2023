@@ -161,7 +161,7 @@ def generate_collection_of_datatype(
         functionToRun = generate_random_polygon_data
         type = "MultiPolygon"
 
-    for i in range(amountOfInstancesInItem):
+    for i in range(int(amountOfInstancesInItem)):
         collection.append(functionToRun(int(pointsToGenerate)))
 
     # Create the GeoJSON feature for the polygon
