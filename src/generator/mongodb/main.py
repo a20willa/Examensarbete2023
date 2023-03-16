@@ -37,7 +37,7 @@ def insertCollections(amount, type, points, instances, seed):
     """
     for i in range(amount):
         data = json.loads(generate_collection_of_datatype(
-            type, instances, seed + i, points))
+            type, instances, int(seed) + i, points))
         mycol.insert_one(data)
 
 
@@ -52,7 +52,7 @@ def insertOnes(amount, type, points, seed):
         seed (number): The seed for the generation
     """
     for i in range(amount):
-        data = json.loads(generate_one_of_datatype(type, seed + i, points))
+        data = json.loads(generate_one_of_datatype(type, int(seed) + i, points))
         mycol.insert_one(data)
 
 
