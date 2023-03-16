@@ -1,6 +1,6 @@
 function getNetworkHAR() {
     browser.devtools.network.getHAR().then((har) => {
-        const harString = JSON.stringify(har);
+        const harString = JSON.stringify(har.entries);
         const file = new Blob([harString], {type: 'application/json'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(file);
