@@ -4,7 +4,7 @@ function getNetworkHAR() {
         const file = new Blob([harString], {type: 'application/json'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(file);
-        a.download = 'har-file.json';
+        a.download = 'geospatial_test_data.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

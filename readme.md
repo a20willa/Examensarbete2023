@@ -98,6 +98,6 @@ The "Get HAR" add-on adds a button to the developer tools panel in Firefox that 
 
 3. Click the "Get Network HAR" button to capture the network activity.
 
-4. The HAR file will be downloaded to your computer with the filename "har-file.json". You can open this file with any text editor or HAR viewer to analyze the network activity.
+4. The HAR file will be downloaded to your computer with the filename "geospatial_test_data.json".
 
 Note that the "Get HAR" add-on is a temporary add-on and will be unloaded when you close Firefox. 
