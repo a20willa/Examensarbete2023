@@ -67,3 +67,37 @@ MongoDB
 
 > npm run start:mongodb
 ```
+
+### Running meassurments
+The meassurments can now be started by going to [localhost](localhost:3000) in your browser. From there, pick the database which you started the server for (so if you ran `npm run start:mysql`, pick mysql). After that, you can choose how many "itterations" you want to run. This basically means that you run the test `x` amount of times. 
+
+After that, you can get the data using the "Get HAR" Firefox addon, which is explain below. 
+
+## Getting the result data
+A custom addon called "Get HAR" has been created to get the fetched data using the developer tools API in firefox. Use this after runnning the tests.
+
+### Installing the "Get HAR" addon
+
+1. Open Firefox and type `about:debugging` in the address bar.
+
+2. On the "about:debugging" page, click on the "This Firefox" menu on the left side of the page.
+
+3. Click on the "Load Temporary Add-on" button. This will open a file dialog.
+
+4. Navigate to the "getHAR" folder in the root folder of this project.
+
+5. Select the `manifest.json` file and click "Open".
+
+## Using the "Get HAR" Add-on
+
+The "Get HAR" add-on adds a button to the developer tools panel in Firefox that allows you to capture the network activity and export it as a HAR file in JSON format. To use the add-on, follow these steps:
+
+1. Open the Firefox developer tools by pressing F12 or by selecting "Web Developer" > "Developer Tools" from the Firefox menu.
+
+2. In the developer tools panel, select the "Get HAR" panel.
+
+3. Click the "Get Network HAR" button to capture the network activity.
+
+4. The HAR file will be downloaded to your computer with the filename "har-file.json". You can open this file with any text editor or HAR viewer to analyze the network activity.
+
+Note that the "Get HAR" add-on is a temporary add-on and will be unloaded when you close Firefox. 
