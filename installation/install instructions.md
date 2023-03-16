@@ -51,7 +51,7 @@ This section will present the components and software used.
 | Specification | Description  |
 | ------------- | ------------ |
 | Name          | Firefox      |
-| Version       | 110.0        |
+| Version       | 111.0        |
 | Platform      | Ubuntu 20.04 |
 
 ## Installing OS
