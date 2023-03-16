@@ -1,15 +1,10 @@
 function getNetworkHAR() {
     browser.devtools.network.getHAR().then((har) => {
-        const harTimes = []
-        
-        for(const entry of har.entries) {
-            harTimes.push(entry.time)
-        }
-
-        const file = new Blob([harTimes], {type: 'application/json'});
+        const harString = JSON.stringify(har);
+        const file = new Blob([harString], {type: 'application/json'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(file);
-        a.download = 'har-file.txt';
+        a.download = 'har-file.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
