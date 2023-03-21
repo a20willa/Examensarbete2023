@@ -109,13 +109,6 @@ This section will explain how to use to use both databases in Node.js
    3. `CREATE DATABASE mysql_database`
    4. ```GRANT ALL ON `mysql_database`.* TO 'a20willa'@'localhost';```
    5. `ALTER USER 'a20willa'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql123';`
-   6. `USE mysql_database`
-   7. ```
-      CREATE TABLE spatial_data_testing (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        g GEOMETRY
-      );
-      ```
 
 ### MongoDB
 1. Run the following commands:

@@ -66,11 +66,12 @@ def insertCollections(amount, type, points, instances, seed):
         )
 
     # Run the queries using the "executemany()" function
-    sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
+    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s))".format(
         config["mysql_table_name"]
     )
-    vals = [(val,) for val in mysqlSpatialData]
+    vals = [(type, val,) for val in mysqlSpatialData]
     mycursor.executemany(sql, vals)
+
 
 
 def insertOnes(amount, type, points, seed):
@@ -92,10 +93,10 @@ def insertOnes(amount, type, points, seed):
         )
 
     # Run the queries using the "executemany()" function
-    sql = "INSERT INTO {} (g) VALUES (ST_GeomFromText(%s))".format(
+    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s))".format(
         config["mysql_table_name"]
     )
-    vals = [(val,) for val in mysqlSpatialData]
+    vals = [(type, val,) for val in mysqlSpatialData]
     mycursor.executemany(sql, vals)
 
 
@@ -114,6 +115,22 @@ def select():
 
 
 def main():
+    # Remove table
+    remove_table_query = """
+        DROP TABLE IF EXISTS {}
+    """.format(config["mysql_table_name"])
+    mycursor.execute(remove_table_query)
+
+    # Create table
+    create_table_query = """
+        CREATE TABLE IF NOT EXISTS {} (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            type TEXT,
+            g GEOMETRY
+        )
+        """.format(config["mysql_table_name"])
+    mycursor.execute(create_table_query)
+
     # Get command line arguments
     amount, type, points, instances, seed = command_line_parser()
 
