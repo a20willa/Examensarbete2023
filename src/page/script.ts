@@ -67,6 +67,9 @@ async function callGetAllEndpoint() {
         const amountOfItems = document.createElement("td")
         amountOfItems.innerText = JSON.parse(json).response.length
 
+        const datatype = document.createElement("td")
+        datatype.innerText = JSON.parse(json).type
+
         // Dont show data if there is too much
         if (String(json).length < 9999) {
             dataText.value = String(json)
@@ -76,7 +79,7 @@ async function callGetAllEndpoint() {
 
         // Create row in table
         const row = document.createElement("tr")
-        row.append(index, url, ok, data, amountOfItems)
+        row.append(index, url, ok, data, amountOfItems, datatype)
         tbody.appendChild(row)
 
         // Increase the index
