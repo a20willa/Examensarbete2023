@@ -12,11 +12,11 @@ def generateLineDiagram():
     plt.xlabel("Amount of requests")
     plt.ylabel("Time (ms)")
 
-    files = ["/pilot study/mongodb/point/geospatial_test_data.json", "/pilot study/mongodb/linestring/geospatial_test_data.json", "/pilot study/mongodb/polygon/geospatial_test_data.json", "/pilot study/mongodb/multipoint/geospatial_test_data.json", "/pilot study/mongodb/multilinestring/geospatial_test_data(1).json", "/pilot study/mongodb/multipolygon/geospatial_test_data(1).json"]
+    files = ["./point/geospatial_test_data.json", "./linestring/geospatial_test_data.json", "./polygon/geospatial_test_data.json", "./multipoint/geospatial_test_data.json", "./multilinestring/geospatial_test_data(1).json", "./multipolygon/geospatial_test_data(1).json"]
 
     for file in files:
         # Load the data from the json file
-        with open('statistics/' + file, 'r') as f:
+        with open(file, 'r') as f:
             data = json.load(f)
 
         # Get the time values from the data
@@ -31,6 +31,6 @@ def generateLineDiagram():
     plt.xticks(np.arange(0, global_time_values, 1))
     plt.legend(["Point", "LineString", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"], loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
-    plt.savefig('statistics/mongodb.png')
+    plt.savefig('mongodb.png')
 
 generateLineDiagram()

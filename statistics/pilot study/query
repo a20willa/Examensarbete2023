@@ -1,1 +1,2 @@
+Pilot study:
 python src/generator/<mysql | mongodb>/main.py --amount 100 --type <type> --instances 10 --seed 200
