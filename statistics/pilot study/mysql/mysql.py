@@ -8,19 +8,22 @@ def generateLineDiagram():
     """
     global_time_values = 0
 
-    plt.title("MongoDB latency in milliseconds over 10 attempts")
+    plt.title('MySQL latency in milliseconds over 10 attempts')
     plt.xlabel("Amount of requests")
     plt.ylabel("Time (ms)")
 
-    files = ["/pilot study/mongodb/point/geospatial_test_data.json", "/pilot study/mongodb/linestring/geospatial_test_data.json", "/pilot study/mongodb/polygon/geospatial_test_data.json", "/pilot study/mongodb/multipoint/geospatial_test_data.json", "/pilot study/mongodb/multilinestring/geospatial_test_data(1).json", "/pilot study/mongodb/multipolygon/geospatial_test_data(1).json"]
+    files = ["./point/geospatial_test_data.json", "./linestring/geospatial_test_data.json", "./polygon/geospatial_test_data.json", "./multipoint/geospatial_test_data(1).json", "./multilinestring/geospatial_test_data(1).json", "./multipolygon/geospatial_test_data(1).json"]
+    allTimeValues = []
 
     for file in files:
         # Load the data from the json file
-        with open('statistics/' + file, 'r') as f:
+        with open(file, 'r') as f:
             data = json.load(f)
 
         # Get the time values from the data
         time_values = [d["time"] for d in data["values"]]
+        allTimeValues.append(time_values)
+
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
@@ -29,8 +32,8 @@ def generateLineDiagram():
     # Show the plot
     # Customize the x-axis tick locations and labels
     plt.xticks(np.arange(0, global_time_values, 1))
-    plt.legend(["Point", "LineString", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"], loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.legend(["Point", "LineString", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"],loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
-    plt.savefig('statistics/mongodb.png')
+    plt.savefig('mysql.png')
 
 generateLineDiagram()
