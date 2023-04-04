@@ -36,14 +36,20 @@ These are the values which will be used to generate and insert data into both My
 #### Pilot Study
 The pilot study uses the following query:
 ```
-python3 src/generator/mysql/main.py --amount 100 --type linestring --points 20 --seed 200
-```
-#### Real Tests
-The real tests uses the following query:
-```
-python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 --seed 200
+python3 src/generator/mysql/main.py --amount 100 --type linestring --points 20 --instances 5 --seed 200
 ```
 
+The following datatypes will be used in the pilot study:
+* Point
+* Linestring
+* Multilinestring
+
+#### Final Study
+The final study uses the following query:
+```
+python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 --instances 5 --seed 200
+```
+All datatypes will be used in the final study.
 
 ## NodeJS
 This project uses NodeJS as the server to host the application and the databases. Therefore, it will need to be installed, which can be done with `sudo apt install nodejs`. You also need to have npm, so install it using `sudo apt install npm`. After installing NodeJS and npm, open a terminal and cd to the root folder of this respotory, then install dependencies using:
