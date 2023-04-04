@@ -12,7 +12,7 @@ def generateLineDiagram():
     plt.xlabel("Amount of requests")
     plt.ylabel("Time (ms)")
 
-    points = ["./point/geospatial_test_data.json", "./linestring/geospatial_test_data.json", "./multilinestring/geospatial_test_data(2).json"]
+    points = ["./point/geospatial_test_data.json", "./linestring/geospatial_test_data.json", "./multilinestring/geospatial_test_data.json"]
 
     for file in points:
         # Load the data from the json file

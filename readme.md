@@ -36,7 +36,8 @@ These are the values which will be used to generate and insert data into both My
 #### Pilot Study
 The pilot study uses the following query:
 ```
-python3 src/generator/mysql/main.py --amount 100 --type linestring --points 20 --instances 5 --seed 200
+python3 src/generator/mysql/main.py --amount 100 --typ
+e linestring --points 20 --instances 5 --seed 200
 ```
 
 The following datatypes will be used in the pilot study:
