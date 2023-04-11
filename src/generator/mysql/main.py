@@ -89,7 +89,7 @@ def insertOnes(amount, type, points, seed):
     # Create all queries and put them in an array
     for i in range(amount):
         mysqlSpatialData.append(
-            re.sub(r",\s*\)", ")", generate_one_of_datatype(type, int(seed) + 1, points))
+            re.sub(r",\s*\)", ")", generate_one_of_datatype(type, int(seed) + i, points))
         )
 
     # Run the queries using the "executemany()" function
