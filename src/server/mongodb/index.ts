@@ -55,7 +55,7 @@ app_mongodb.get('/getNearMongodb', async (req: any, res: any) => {
           $near: {
             $geometry: {
               type: "Point",
-              coordinates: [-170.5163830345708, 50.646429997753756]
+              coordinates: [-83.5163830345708, 50.646429997753756]
             },
           }
         }

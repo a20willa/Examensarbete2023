@@ -25,23 +25,6 @@ sqldb = mysql.connector.connect(
 # Creates the cursor needed to execute queries
 mycursor = sqldb.cursor()
 
-# Drop the table as it needs to be empty before adding new data
-try:
-    sql = "DROP TABLE IF EXISTS {}".format(config["mysql_table_name"])
-    mycursor.execute(sql)
-except Exception as e:
-    print(e)
-
-# Create the table with a id and a single column for the geospatial data
-try:
-    sql = "CREATE TABLE {} (id INT NOT NULL AUTO_INCREMENT, g GEOMETRY, PRIMARY KEY (id))".format(
-        config["mysql_table_name"]
-    )
-    mycursor.execute(sql)
-except Exception as e:
-    print(e)
-
-
 def insertCollections(amount, type, points, instances, seed):
     """
     Inserts x collection instances queries into a given collection
@@ -66,7 +49,7 @@ def insertCollections(amount, type, points, instances, seed):
         )
 
     # Run the queries using the "executemany()" function
-    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s))".format(
+    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s, 4326))".format(
         config["mysql_table_name"]
     )
     vals = [(type, val,) for val in mysqlSpatialData]
@@ -93,7 +76,7 @@ def insertOnes(amount, type, points, seed):
         )
 
     # Run the queries using the "executemany()" function
-    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s))".format(
+    sql = "INSERT INTO {} (type, g) VALUES (%s, ST_GeomFromText(%s, 4326))".format(
         config["mysql_table_name"]
     )
     vals = [(type, val,) for val in mysqlSpatialData]
@@ -145,7 +128,7 @@ def main():
         CREATE TABLE IF NOT EXISTS {} (
             id INT PRIMARY KEY AUTO_INCREMENT,
             type TEXT,
-            g GEOMETRY
+            g GEOMETRY NOT NULL SRID 4326
         )
         """.format(config["mysql_table_name"])
     mycursor.execute(create_table_query)

@@ -22,7 +22,7 @@ def generate_random_point_data(n):
     coordinates = []
 
     # Generate random coordinates in the range of -180 to 180 for longitude and -90 to 90 for latitude
-    longitude = random.uniform(-180, 180)
+    longitude = random.uniform(-90, 90)
     latitude = random.uniform(-90, 90)
     coordinates = [longitude, latitude]
 
@@ -44,7 +44,7 @@ def generate_random_linestring_data(num_points):
 
     # Generate random coordinates for the start and end points of the linestring
     for i in range(num_points):
-        longitude = random.uniform(-180, 180)
+        longitude = random.uniform(-90, 90)
         latitude = random.uniform(-90, 90)
         coordinates.append([longitude, latitude])
 
@@ -67,7 +67,7 @@ def generate_random_polygon_data(num_points):
 
     # Generate random coordinates for the start and end points of the polygon
     for i in range(num_points):
-        longitude = random.uniform(-180, 180)
+        longitude = random.uniform(-90, 90)
         latitude = random.uniform(-90, 90)
 
         # We need to save the first point as the first and last point in a polygon always is the same

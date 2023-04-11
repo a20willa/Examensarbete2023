@@ -33,12 +33,12 @@ app_mysql.use(express_mysql.static('src/page'))
 // Get all rows
 function getRows(req: any, res: any) {
   // Run get query
-  connection.query(`SELECT ST_DISTANCE_SPHERE(-170.5163830345708, 50.646429997753756) AS distance from ${data_mysql.table_name}`, (err: Error, result: any) => {
+  connection.query(`SELECT * from ${data_mysql.table_name} WHERE ST_Distance(g, ST_GeomFromText('POINT(-83.5163830345708 50.646429997753756)', 4326))`, (err: Error, result: any) => {
     if (err) throw err;
     if (result.length != 0) {
       res.send({ response: result });
     } else {
-      res.send({response: "err"})
+      res.send({ response: "err" })
     }
   });
 }
