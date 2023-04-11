@@ -67,8 +67,14 @@ async function callGetAllEndpoint() {
         const amountOfItems = document.createElement("td")
         amountOfItems.innerText = JSON.parse(json).response.length
 
+        // Create datatype attribute
         const datatype = document.createElement("td")
-        datatype.innerText = JSON.parse(json).response[0].type
+        try {
+            console.log(JSON.parse(json).response[0])
+            datatype.innerText = JSON.parse(json).response[0].type
+        } catch (e) {
+            datatype.innerText = "No data"
+        }
 
         // Dont show data if there is too much
         if (String(json).length < 9999) {

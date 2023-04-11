@@ -9,9 +9,9 @@ import sys
 
 # Create mongodb client
 config = dotenv_values(".env")
-myclient = pymongo.MongoClient()
-mydb = myclient[config["mongodb_database"]]
-mycol = mydb[config["mongodb_collection_name"]]
+client = pymongo.MongoClient()
+mydb = client[config["mongodb_database"]]
+col = mydb[config["mongodb_collection_name"]]
 
 # Import helper functions
 sys.path.insert(1, 'src/generator/helpers')
@@ -19,7 +19,7 @@ from helpers import command_line_parser, createSeperator
 
 # Remove everyting in the database
 try:
-    mycol.delete_many({})
+    col.delete_many({})
 except pymongo.errors.ServerSelectionTimeoutError:
     print("Could not connect to MongoDB database, is it running?")
     exit(1)
@@ -38,7 +38,9 @@ def insertCollections(amount, type, points, instances, seed):
     for i in range(amount):
         data = json.loads(generate_collection_of_datatype(
             type, instances, int(seed) + i, points))
-        mycol.insert_one(data)
+        
+        data = {'loc': data}
+        col.insert_one(data)
 
 
 def insertOnes(amount, type, points, seed):
@@ -53,18 +55,18 @@ def insertOnes(amount, type, points, seed):
     """
     for i in range(amount):
         data = json.loads(generate_one_of_datatype(type, int(seed) + i, points))
-        mycol.insert_one(data)
-
+        data = {'loc': data}
+        col.insert_one(data)
 
 def select():
     """
     Executes a select statement to print the table contents in human readable form
     """
     separator, separator_line = createSeperator(
-    "Results", max(mycol.find({}), key=len), 50)
+    "Results", max(col.find({}), key=len), 50)
     
     print(separator)
-    for x in mycol.find({}):
+    for x in col.find({}):
         print(x)
     print(separator_line)
 
@@ -81,6 +83,9 @@ def main():
     else:
         insertCollections(amount, type, points, instances, seed)
         
+    # Create index
+    col.create_index([("loc", "2dsphere")])
+    
     # Print results
     select()
     print("\nDone!")

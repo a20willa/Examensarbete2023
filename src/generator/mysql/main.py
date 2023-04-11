@@ -114,6 +114,25 @@ def select():
     print(separator_line)
 
 
+def createIndex():
+    # Check if the g column has the correct data type
+    sql = "SHOW COLUMNS FROM {} WHERE Field='g' AND Type LIKE 'geometry%'".format(
+        config["mysql_table_name"]
+    )
+    mycursor.execute(sql)
+    result = mycursor.fetchone()
+    if result is not None:
+        # Create a spatial index on the column
+        try:
+            sql = "CREATE SPATIAL INDEX sp_g ON {} (g)".format(
+                config["mysql_table_name"]
+            )
+            mycursor.execute(sql)
+        except Exception as e:
+            print(e)
+    else:
+        print("The 'g' column does not have a spatial data type.")
+
 def main():
     # Remove table
     remove_table_query = """
@@ -143,6 +162,9 @@ def main():
     else:
         insertCollections(amount, type, points, instances, seed)
 
+    # Create index
+    createIndex()
+        
     # Needed to actually commit the changes, otherwise nothing will land in the databbase
     sqldb.commit()
 
