@@ -10,31 +10,23 @@ This section will present the components and software used.
 
 | Specification       | Description                                         |
 | ------------------- | --------------------------------------------------- |
-| CPU Type            | AMD E1-2500 APU with Radeon(TM) HD Graphics         |
-| CPU Speed           | 1400 MHz                                            |
-| HDD Model Name      | Toshiba MQ01ABD050                                  |
-| System BIOS Version | V2.02                                               |
-| GOP Version         | AMD GOP X64 Driver Rev. 1.45.0.15.31.LibBuiIdNo:216 |
-| Serial Number       | NXC2CED03932112F726600                              |
-| Product Number      | EasyNote TE69KB                                     |
-| Manufacturer Name   | Packard Bell                                        |
-| UUID                | AA95EFDF9867459DAC70F016332F0B7C                    |
+| CPU Type            | Intel(R) Core(TM) i5-7400 CPU @ 3.00GHz             |
+| GPU                 | NVIDIA GP106 [GeForce GTX 1060 3GB]                 |
+| Memory              | 16 GB 2400 MT/S DDR4                                |
 
 ### OS
 
 | Specification | Description                                         |
 | ------------- | --------------------------------------------------- |
-| OS            | Linux Lite 6.2                                      |
-| Kernel        | Linux 5.15.0.52-generic (x86_64)                    |
-| Version       | #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022         |
-| C Library     | GNU C Library / (Ubuntu GLIBC 2.35-0ubuntu3.1) 2.35 |
+| OS            | Pop!_OS 22.04 LTS                                   |
+| Kernel        | Linux 6.2.6-76060206-generic (x86-64)               |
 
 ### MongoDB
 
 | Specification | Description              |
 | ------------- | ------------------------ |
 | Name          | MongoDB Community Server |
-| Version       | 6.00.4                   |
+| Version       | 6.0.5                    |
 | Package       | Server                   |
 | Platform      | Ubuntu 20.04             |
 
@@ -48,26 +40,11 @@ This section will present the components and software used.
 
 ### Firefox
 
-| Specification | Description  |
-| ------------- | ------------ |
-| Name          | Firefox      |
-| Version       | 111.0        |
-| Platform      | Ubuntu 20.04 |
-
-## Installing OS
-
-This section will provide info on how to setup the testing environment.
-
-### Setup Linux Lite
-
-1. Download Linux Lite 6.2 and flash it to a bootable image.
-2. When booting up the installation menu, pick the “Boot Linux Lite 6.2 Live System” ![Boot menu when installing linux lite](images/image1.png)
-3. Once loaded up, open the “Install Linux Lite” program, and follow instructions.
-   1. Check the “Download updates while installing Linux” checkbox
-      ![Installation dialog with two checkboxes, the one on top is checked](images/image2.png)
-   2. Check the “Erase disk and install Linnux” checkbox, then press “Continue”
-      ![Installation dialog with two radio buttons, the one on top is checked](images/image3.png)
-   3. Restart the computer and login
+| Specification | Description       |
+| ------------- | ----------------- |
+| Name          | Firefox           |
+| Version       | 111.0.1 (64 bit)  |
+| Platform      | Ubuntu 20.04      |
 
 ### Setup MongoDB
 
