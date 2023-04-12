@@ -8,7 +8,7 @@ def generateLineDiagram():
     """
     global_time_values = 0
 
-    plt.title("MongoDB latency in milliseconds over 10 attempts")
+    plt.title("MongoDB latency in milliseconds over 100 attempts")
     plt.xlabel("Amount of requests")
     plt.ylabel("Time (ms)")
 
@@ -29,7 +29,7 @@ def generateLineDiagram():
 
     # Show the plot
     # Customize the x-axis tick locations and labels
-    plt.xticks(np.arange(0, global_time_values, 1))
+    plt.xticks(np.arange(0, global_time_values + 1, 10))
     plt.legend(["Point", "LineString", "MultiLineString"], loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
     plt.savefig('mongodb.png')
