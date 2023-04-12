@@ -43,8 +43,15 @@ function getRows(req: any, res: any) {
   });
 }
 
+// Close connection
+function closeConnection(req: any, res: any) {
+  connection.end();
+  res.send({ response: "Connection closed" });
+}
+
 // Dummy endpoint
 app_mysql.get('/getAllMysql', getRows)
+app_mysql.get('/closeConnection', closeConnection)
 
 // Listen to port 3000
 app_mysql.listen("3000", () => {

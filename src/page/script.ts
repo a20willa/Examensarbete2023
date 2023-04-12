@@ -22,6 +22,14 @@ async function callGetAllEndpoint() {
         }
     }
 
+    // Close connection
+    await fetch(
+        'http://127.0.0.1:3000/closeConnection',
+        {
+            method: 'GET',
+            mode: 'cors',
+        },
+    )
 
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
