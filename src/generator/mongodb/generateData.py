@@ -20,7 +20,7 @@ def generate_random_point_data(n):
     # Define the GeoJSON features list
     coordinates = []
 
-    # Generate random coordinates in the range of -180 to 180 for longitude and -90 to 90 for latitude
+    # Generate random coordinates in the range of -90 to 90 for longitude and -90 to 90 for latitude
     longitude = random.uniform(-90, 90)
     latitude = random.uniform(-90, 90)
     coordinates = [longitude, latitude]

@@ -21,7 +21,7 @@ def generateLineDiagram():
 
         # Get the time values from the data
         time_values = [d["time"] for d in data["values"]]
-        plt.axis([None, None, 0, 150])
+        plt.axis([None, None, 0, 80])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
