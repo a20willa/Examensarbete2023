@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import json
 import numpy as np
-from scipy.stats import f_oneway
+from scipy.stats import f_oneway, sem
 
 def generateLineDiagram(database):
     """
@@ -81,7 +81,9 @@ def generateBarDiagram(database):
 
         # Plot the time values for geospatial requests
         y.append(np.mean(time_values))
-        se.append(np.std(time_values))
+
+        # Standard error
+        se.append(np.std(time_values, ddof=1) / np.sqrt(np.size(time_values)))
 
     # Show the plot
     # Customize the x-axis tick locations and labels
@@ -94,7 +96,8 @@ def generateBarDiagram(database):
 
     # Plot the bar diagram
     plt.errorbar(x, y, yerr=se, fmt='none', color='black', capsize=5)
-    plt.bar(x,y)
+    # Fix colors
+    plt.bar(x,y, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
     plt.savefig('./figures/{}_SE.png'.format(database))
 
 def performAnovaTest():
