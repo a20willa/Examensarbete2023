@@ -6,6 +6,8 @@ def generateLineDiagram(database):
     """
     Generates a line diagram for the geospatial requests
     """
+    # Reset plt
+    plt.clf()
     global_time_values = 0
 
     # Set the title of the plot
@@ -46,6 +48,9 @@ def generateBarDiagram(database):
     """
     Generates a bar diagram for the geospatial requests
     """
+    # Reset plt
+    plt.clf()
+
     x = np.array(["Point", "LineString", "MultiLineString"])
     y = []
     se = []
