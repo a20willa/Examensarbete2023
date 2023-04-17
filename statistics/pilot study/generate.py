@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import json
 import numpy as np
+from scipy.stats import f_oneway
 
 def generateLineDiagram(database):
     """
@@ -57,9 +58,9 @@ def generateBarDiagram(database):
 
     # Set the title of the plot
     if database == "mysql":
-        plt.title("MySQL mean latency and standard error in milliseconds over 100 attempt")
+        plt.title("MySQL standard error in milliseconds over 100 attempt")
     elif database == "mongodb":
-        plt.title("MongoDB mean latency and standard error in milliseconds over 100 attempt")
+        plt.title("MongoDB standard error in milliseconds over 100 attempt")
 
     # Set the labels of the plot
     plt.xlabel("Amount of requests")
@@ -96,5 +97,60 @@ def generateBarDiagram(database):
     plt.bar(x,y)
     plt.savefig('./figures/{}_SE.png'.format(database))
 
+def performAnovaTest():
+    # Define the data for MongoDB and MySQL
+    all_means = []
+    mongodb_means = []
+    mysql_means = []
+
+    # Get the files for the points
+    points_mongodb = ["./mysql/point/geospatial_test_data.json", "./mysql/linestring/geospatial_test_data.json", "./mysql/multilinestring/geospatial_test_data.json"]
+    point_mysql = ["./mongodb/point/geospatial_test_data.json", "./mongodb/linestring/geospatial_test_data.json", "./mongodb/multilinestring/geospatial_test_data.json"]
+    
+    # Loop through the files - MongoDB
+    for file in points_mongodb:
+        # Load the data from the json file
+        with open(file, 'r') as f:
+            data = json.load(f)
+
+        # Get the time values from the data
+        time_values = [d["time"] for d in data["values"]]
+        plt.axis([None, None, 0, 80])
+
+        # Plot the time values for geospatial requests
+        mongodb_means.append(np.mean(time_values))
+
+    # Loop through the files - MySQL
+    for file in point_mysql:
+        # Load the data from the json file
+        with open(file, 'r') as f:
+            data = json.load(f)
+
+        # Get the time values from the data
+        time_values = [d["time"] for d in data["values"]]
+        plt.axis([None, None, 0, 80])
+
+        # Plot the time values for geospatial requests
+        mysql_means.append(np.mean(time_values))
+
+    # Add the means to the list
+    all_means.append(mysql_means)
+    all_means.append(mongodb_means)
+
+    # Perform one-way ANOVA test
+    f_stat, p_val = f_oneway(*all_means)
+
+    # Print the results
+    print("F statistic:", f_stat)
+    print("p-value:", p_val)
+
+
+# Anova tests
+performAnovaTest()
+
+# Line diagrams
 generateLineDiagram("mongodb")
+generateLineDiagram("mysql")
+# Bar diagrams
 generateBarDiagram("mongodb")
+generateBarDiagram("mysql")
