@@ -117,6 +117,50 @@ def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
     else:
         return False
 
+def getMeans():
+    # Get the pilot study files
+    points_mongodb = ["./mysql/point/geospatial_test_data.json", "./mysql/linestring/geospatial_test_data.json", "./mysql/multilinestring/geospatial_test_data.json"]
+    points_mysql = ["./mongodb/point/geospatial_test_data.json", "./mongodb/linestring/geospatial_test_data.json", "./mongodb/multilinestring/geospatial_test_data.json"]
+
+    # Loop through the files - MongoDB
+    for file in range(len(points_mongodb)):
+        combined_csv_mongodb = ""
+        combined_csv_mysql = ""
+
+        # Convert json to csv and read the csv
+        with open(points_mongodb[file], 'r') as j:
+            json_file = json.loads(j.read())
+        
+            # Loop through the values
+            for i in json_file['values']:
+                combined_csv_mysql += str(i['time']) + "\n"
+
+        # Convert json to csv and read the csv
+        with open(points_mysql[file], 'r') as j:
+            json_file = json.loads(j.read())
+        
+            # Loop through the values
+            for i in json_file['values']:
+                combined_csv_mongodb += str(i['time']) + "\n"
+
+        # Read the csv
+        df_mongodb = pd.read_csv(StringIO(combined_csv_mongodb), header=None)
+        df_mysql = pd.read_csv(StringIO(combined_csv_mysql), header=None)
+
+        # Get the means
+        mean_mongodb = df_mongodb.mean()
+        mean_mysql = df_mysql.mean()
+
+        # Print the means
+        print("MongoDB: " + str(mean_mongodb[0]))
+        print("MySQL: " + str(mean_mysql[0]))
+
+        # Perform the ANOVA test
+        if anova(df_mongodb[0], df_mysql[0]):
+            print("The means are significantly different")
+        else:
+            print("The means are not significantly different")
+
 def exampleAnova():
     # Get the pilot study files
     points_mongodb = ["./mysql/point/geospatial_test_data.json", "./mysql/linestring/geospatial_test_data.json", "./mysql/multilinestring/geospatial_test_data.json"]
@@ -160,6 +204,7 @@ def exampleAnova():
 
 # Anova tests
 exampleAnova()
+getMeans()
 
 # Line diagrams
 #generateLineDiagram("mongodb")
