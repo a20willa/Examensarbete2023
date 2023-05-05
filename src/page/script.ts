@@ -6,10 +6,13 @@ async function callGetAllEndpoint() {
     const fetches = []
     const itterationsInput = document.getElementById("itterations") as HTMLInputElement
     const database = (document.getElementById("database") as HTMLSelectElement).value
+    let times = []
 
     // Go trough itterations
     for (var i = 0; i < Number(itterationsInput.value); i++) {
+        let fetch_time = {"start": '', "end": ''}
         try {
+            fetch_time.start = String(Date.now())
             fetches.push(await fetch(
                 'http://127.0.0.1:3000/' + database + '?cache=' + Math.random(),
                 {
@@ -17,6 +20,8 @@ async function callGetAllEndpoint() {
                     mode: 'cors',
                 },
             ))
+            fetch_time.end = String(Date.now())
+            times.push(fetch_time)
         } catch (e) {
             throw new Error(String(e))
         }
@@ -30,6 +35,14 @@ async function callGetAllEndpoint() {
             mode: 'cors',
         },
     )
+
+    // Save times to file with a anchor tag
+    const timesFile = new File([JSON.stringify(times)], "times.json", {type: "text/plain;charset=utf-8"})
+    const timesFileURL = URL.createObjectURL(timesFile)
+    const timesFileAnchor = document.createElement("a")
+    timesFileAnchor.href = timesFileURL
+    timesFileAnchor.download = "times.json"
+    timesFileAnchor.click()
 
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
