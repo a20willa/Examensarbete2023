@@ -10,9 +10,9 @@ async function callGetAllEndpoint() {
 
     // Go trough itterations
     for (var i = 0; i < Number(itterationsInput.value); i++) {
-        let fetch_time = {"start": '', "end": ''}
+        let fetch_time = { "start": 0, "end": 0 }
         try {
-            fetch_time.start = String(Date.now())
+            fetch_time.start = Number(Date.now())
             fetches.push(await fetch(
                 'http://127.0.0.1:3000/' + database + '?cache=' + Math.random(),
                 {
@@ -20,29 +20,12 @@ async function callGetAllEndpoint() {
                     mode: 'cors',
                 },
             ))
-            fetch_time.end = String(Date.now())
-            times.push(fetch_time)
+            fetch_time.end = Number(Date.now())
+            times.push(Math.abs(fetch_time.end - fetch_time.start))
         } catch (e) {
             throw new Error(String(e))
         }
     }
-
-    // Close connection
-    await fetch(
-        'http://127.0.0.1:3000/closeConnection',
-        {
-            method: 'GET',
-            mode: 'cors',
-        },
-    )
-
-    // Save times to file with a anchor tag
-    const timesFile = new File([JSON.stringify(times)], "times.json", {type: "text/plain;charset=utf-8"})
-    const timesFileURL = URL.createObjectURL(timesFile)
-    const timesFileAnchor = document.createElement("a")
-    timesFileAnchor.href = timesFileURL
-    timesFileAnchor.download = "times.json"
-    timesFileAnchor.click()
 
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
@@ -55,6 +38,8 @@ async function callGetAllEndpoint() {
     let columRow = 0
     // Error value to say that something failed
     let err = false
+    // Datatype
+    let store_datatype = ""
 
     // Go trough all resposes and append table attributes
     for (const response of responses) {
@@ -66,6 +51,8 @@ async function callGetAllEndpoint() {
             err = true
             break;
         }
+
+        console.log(json)
 
         // Create index attribute
         const index = document.createElement("td")
@@ -91,8 +78,14 @@ async function callGetAllEndpoint() {
         // Create datatype attribute
         const datatype = document.createElement("td")
         try {
-            console.log(JSON.parse(json).response[0])
-            datatype.innerText = JSON.parse(json).response[0].type
+            if (database == "getAllMongodb") {
+                datatype.innerText = JSON.parse(json).response[0].loc.type
+                store_datatype = JSON.parse(json).response[0].loc.type
+            }
+            else {
+                datatype.innerText = JSON.parse(json).response[0].type
+                store_datatype = JSON.parse(json).response[0].type
+            }
         } catch (e) {
             datatype.innerText = "No data"
         }
@@ -113,7 +106,16 @@ async function callGetAllEndpoint() {
         columRow++
     }
 
-    if(err) {
+    // Save times to file with a anchor tag
+    const database_name = (document.getElementById("database") as HTMLSelectElement).value == "getAllMongodb" ? "mongodb" : "mysql"
+    const timesFile = new File([JSON.stringify(times)], `times_${database_name}_${store_datatype}.json`, { type: "text/plain;charset=utf-8" })
+    const timesFileURL = URL.createObjectURL(timesFile)
+    const timesFileAnchor = document.createElement("a")
+    timesFileAnchor.href = timesFileURL
+    timesFileAnchor.download = `times_${database_name}_${store_datatype}.json`
+    timesFileAnchor.click()
+
+    if (err) {
         document.getElementById("running")!.innerHTML = "An error occured (are you using the correct database?)"
     } else {
         // Remove test text as to leave room for the table

@@ -53,12 +53,6 @@ app_mongodb.get('/getAllMongodb', (req: any, res: any) => {
   });
 });
 
-app_mongodb.get('/closeConnection', (req: any, res: any) => {
-    client.close();
-    res.send({ response: "Connection closed" });
-})
-
-
 // Listen to port 3000
 app_mongodb.listen("3000", () => {
   console.log("Server started at http://localhost:3000")
