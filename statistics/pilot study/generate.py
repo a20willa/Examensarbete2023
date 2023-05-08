@@ -25,17 +25,13 @@ def generateLineDiagram(database):
     plt.ylabel("Time (ms)")
 
     # Get the files for the points
-    points = ["./{}/point/geospatial_test_data.json".format(database), "./{}/linestring/geospatial_test_data.json".format(database), "./{}/multilinestring/geospatial_test_data.json".format(database)]
+    points = ["./{}/point/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database)]
 
     # Loop through the files
     for file in points:
-        # Load the data from the json file
-        with open(file, 'r') as f:
-            data = json.load(f)
-
         # Get the time values from the data
-        time_values = [d["time"] for d in data["values"]]
-        plt.axis([None, None, 0, 80])
+        time_values = pd.read_csv(file, header=None)
+        plt.axis([None, None, 0, 200])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
@@ -55,8 +51,8 @@ def generateBarDiagram(database):
     plt.clf()
 
     x = np.array(["Point", "LineString", "MultiLineString"])
-    y = []
-    se = []
+    means = []
+    std = []
 
     # Set the title of the plot
     if database == "mysql":
@@ -69,37 +65,32 @@ def generateBarDiagram(database):
     plt.ylabel("Time (ms)")
 
     # Get the files for the points
-    points = ["./{}/point/geospatial_test_data.json".format(database), "./{}/linestring/geospatial_test_data.json".format(database), "./{}/multilinestring/geospatial_test_data.json".format(database)]
+    points = ["./{}/point/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database)]
 
     # Loop through the files
     for file in points:
-        # Load the data from the json file
-        with open(file, 'r') as f:
-            data = json.load(f)
-
         # Get the time values from the data
-        time_values = [d["time"] for d in data["values"]]
+        time_values = pd.read_csv(file, header=None)
         plt.axis([None, None, 0, 80])
 
         # Plot the time values for geospatial requests
-        y.append(np.mean(time_values))
+        means.append(time_values.mean()[0])
 
         # Standard error
-        se.append(np.std(time_values))
+        std.append(time_values.std()[0])
 
     # Show the plot
     # Customize the x-axis tick locations and labels
     plt.legend(["Point", "LineString", "MultiLineString"], loc='center left', bbox_to_anchor=(1, 0.5))
-    plt.tight_layout()
 
     # Convert the list to a numpy array
-    y = np.array(y)
-    se = np.array(se)
+    means = np.array(means)
+    std = np.array(std)
 
     # Plot the bar diagram
-    plt.errorbar(x, y, yerr=se, fmt='none', color='black', capsize=5)
+    plt.errorbar(x, means, yerr=std, fmt='none', color='black', capsize=5)
     # Fix colors
-    plt.bar(x,y, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
+    plt.bar(x,means, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
     plt.savefig('./figures/{}_STD.png'.format(database))
 
 def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
@@ -119,96 +110,50 @@ def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
 
 def getMeans():
     # Get the pilot study files
-    points_mongodb = ["./mysql/point/geospatial_test_data.json", "./mysql/linestring/geospatial_test_data.json", "./mysql/multilinestring/geospatial_test_data.json"]
-    points_mysql = ["./mongodb/point/geospatial_test_data.json", "./mongodb/linestring/geospatial_test_data.json", "./mongodb/multilinestring/geospatial_test_data.json"]
+    points_mongodb = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
+    points_mysql = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
-        combined_csv_mongodb = ""
-        combined_csv_mysql = ""
-
-        # Convert json to csv and read the csv
-        with open(points_mongodb[file], 'r') as j:
-            json_file = json.loads(j.read())
-        
-            # Loop through the values
-            for i in json_file['values']:
-                combined_csv_mysql += str(i['time']) + "\n"
-
-        # Convert json to csv and read the csv
-        with open(points_mysql[file], 'r') as j:
-            json_file = json.loads(j.read())
-        
-            # Loop through the values
-            for i in json_file['values']:
-                combined_csv_mongodb += str(i['time']) + "\n"
-
-        # Read the csv
-        df_mongodb = pd.read_csv(StringIO(combined_csv_mongodb), header=None)
-        df_mysql = pd.read_csv(StringIO(combined_csv_mysql), header=None)
+        df_mongodb = pd.read_csv(points_mongodb[file], header=None)
+        df_mysql = pd.read_csv(points_mysql[file], header=None)
 
         # Get the means
         mean_mongodb = df_mongodb.mean()
         mean_mysql = df_mysql.mean()
 
+        # Print the results
+        print("Results for type: " + points_mongodb[file].split("/")[2].split(".")[0].upper())
+
         # Print the means
         print("MongoDB: " + str(mean_mongodb[0]))
         print("MySQL: " + str(mean_mysql[0]))
 
-        # Perform the ANOVA test
-        if anova(df_mongodb[0], df_mysql[0]):
-            print("The means are significantly different")
-        else:
-            print("The means are not significantly different")
-
-def exampleAnova():
+def getAnova():
     # Get the pilot study files
-    points_mongodb = ["./mysql/point/geospatial_test_data.json", "./mysql/linestring/geospatial_test_data.json", "./mysql/multilinestring/geospatial_test_data.json"]
-    points_mysql = ["./mongodb/point/geospatial_test_data.json", "./mongodb/linestring/geospatial_test_data.json", "./mongodb/multilinestring/geospatial_test_data.json"]
+    points_mongodb = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
+    points_mysql = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
-        combined_csv_mongodb = ""
-        combined_csv_mysql = ""
-
-        # Convert json to csv and read the csv
-        with open(points_mongodb[file], 'r') as j:
-            json_file = json.loads(j.read())
-        
-            # Loop through the values
-            for i in json_file['values']:
-                combined_csv_mysql += str(i['time']) + "\n"
-
-        # Convert json to csv and read the csv
-        with open(points_mysql[file], 'r') as j:
-            json_file = json.loads(j.read())
-        
-            # Loop through the values
-            for i in json_file['values']:
-                combined_csv_mongodb += str(i['time']) + "\n"
-
-        # Read the csv
-        df = pd.read_csv( StringIO(combined_csv_mongodb), header=None, names=['time'])
-        df2 = pd.read_csv( StringIO(combined_csv_mysql), header=None, names=['time'])
+        df_mongodb = pd.read_csv(points_mongodb[file], header=None)
+        df_mysql = pd.read_csv(points_mysql[file], header=None)
         
         # Print the results
         print("Results for type: " + points_mongodb[file].split("/")[2].split(".")[0].upper())
 
         # Run Anova on data groups
-        if (anova(df['time'], df2['time'])):
+        if (anova(df_mongodb, df_mysql)):
             print("The means are different")
         else:
             print("No differences in means")
 
         print("")
 
-# Anova tests
-exampleAnova()
-getMeans()
+# getAnova()
+# getMeans()
 
-# Line diagrams
-#generateLineDiagram("mongodb")
-#generateLineDiagram("mysql")
-# Bar diagrams
-#generateBarDiagram("mongodb")
-#generateBarDiagram("mysql")
+generateLineDiagram("mongodb")
+generateLineDiagram("mysql")
+generateBarDiagram("mongodb")
+generateBarDiagram("mysql")
