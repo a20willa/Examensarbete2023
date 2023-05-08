@@ -106,13 +106,20 @@ async function callGetAllEndpoint() {
         columRow++
     }
 
+    let output = ""
+
+    // Format times
+    times.forEach((time) => {
+        output += time + "\n"
+    })
+
     // Save times to file with a anchor tag
     const database_name = (document.getElementById("database") as HTMLSelectElement).value == "getAllMongodb" ? "mongodb" : "mysql"
-    const timesFile = new File([JSON.stringify(times)], `times_${database_name}_${store_datatype}.json`, { type: "text/plain;charset=utf-8" })
+    const timesFile = new File([output], `times.txt`, { type: "text/plain;charset=utf-8" })
     const timesFileURL = URL.createObjectURL(timesFile)
     const timesFileAnchor = document.createElement("a")
     timesFileAnchor.href = timesFileURL
-    timesFileAnchor.download = `times_${database_name}_${store_datatype}.json`
+    timesFileAnchor.download = `times.txt`
     timesFileAnchor.click()
 
     if (err) {
