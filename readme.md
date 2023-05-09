@@ -39,6 +39,8 @@ The pilot study uses the following query:
 python3 src/generator/mysql/main.py --amount 100 --type linestring --points 20 --instances 5 --seed 200
 ```
 
+With 100 datapoints and 3 repeats.
+
 The following datatypes will be used in the pilot study:
 * Point
 * Linestring
@@ -49,6 +51,9 @@ The final study uses the following query:
 ```
 python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 --instances 5 --seed 200
 ```
+
+With 1000 datapoints and 3 repeats.
+
 All datatypes will be used in the final study.
 
 ## NodeJS

@@ -86,6 +86,10 @@ async function callGetAllEndpoint() {
         const url = document.createElement("td")
         url.innerText = response.url
 
+        // Create times attribute
+        const time = document.createElement("td")
+        time.innerText = String(([] as Number[]).concat(...times)[columRow])
+
         // Create ok attribute
         const ok = document.createElement("td")
         ok.innerText = String(response.ok)
@@ -123,7 +127,7 @@ async function callGetAllEndpoint() {
 
         // Create row in table
         const row = document.createElement("tr")
-        row.append(index, url, ok, data, amountOfItems, datatype)
+        row.append(index, url, ok, data, amountOfItems, datatype, time)
         tbody.appendChild(row)
 
         // Increase the index
