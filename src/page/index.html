@@ -23,9 +23,10 @@
         <option value="getAllMongodb">MongoDB</option>
         <option value="getAllMysql">MySQL</option>
     </select>
-    <BR>
-    <label for="itterations">Itterations:</label>
-    <input type="number" id="itterations"/>
+    <label for="itterations">Datapoints:</label>
+    <input type="number" id="itterations" value="100"/>
+    <label for="repeat">Repeat:</label>
+    <input type="number" id="repeat" value="3"/>
     <button onclick="callGetAllEndpoint()">
         Run
     </button>

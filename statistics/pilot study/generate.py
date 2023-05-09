@@ -31,7 +31,7 @@ def generateLineDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 200])
+        plt.axis([None, None, 0, 100])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
@@ -39,7 +39,7 @@ def generateLineDiagram(database):
 
     # Show the plot
     # Customize the x-axis tick locations and labels
-    plt.xticks(np.arange(0, global_time_values + 1, 10))
+    plt.xticks(np.arange(0, global_time_values + 1, 100))
     plt.legend(["Point", "LineString", "MultiLineString"], loc='upper right')
     plt.savefig('./figures/{}_linechart.png'.format(database))
 
@@ -110,8 +110,8 @@ def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
 
 def getMeans():
     # Get the pilot study files
-    points_mongodb = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
-    points_mysql = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
+    points_mysql = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
+    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
@@ -131,8 +131,8 @@ def getMeans():
 
 def getAnova():
     # Get the pilot study files
-    points_mongodb = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
-    points_mysql = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
+    points_mysql = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
+    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
@@ -150,7 +150,7 @@ def getAnova():
 
         print("")
 
-# getAnova()
+getAnova()
 # getMeans()
 
 generateLineDiagram("mongodb")

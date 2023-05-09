@@ -5,27 +5,53 @@ async function callGetAllEndpoint() {
     // Variables
     const fetches = []
     const itterationsInput = document.getElementById("itterations") as HTMLInputElement
+    const repeat = document.getElementById("repeat") as HTMLInputElement
     const database = (document.getElementById("database") as HTMLSelectElement).value
-    let times = []
+    let times: number[][] = []
 
-    // Go trough itterations
-    for (var i = 0; i < Number(itterationsInput.value); i++) {
-        let fetch_time = { "start": 0, "end": 0 }
-        try {
-            fetch_time.start = Number(Date.now())
-            fetches.push(await fetch(
-                'http://127.0.0.1:3000/' + database + '?cache=' + Math.random(),
-                {
-                    method: 'GET',
-                    mode: 'cors',
-                },
-            ))
-            fetch_time.end = Number(Date.now())
-            times.push(Math.abs(fetch_time.end - fetch_time.start))
-        } catch (e) {
-            throw new Error(String(e))
+    for (let e = 0; e < Number(repeat.value); e++) {
+        times.push([])
+
+        // Go trough itterations
+        for (var i = 0; i < Number(itterationsInput.value); i++) {
+            let fetch_time = { "start": 0, "end": 0 }
+            try {
+                fetch_time.start = Number(Date.now())
+                fetches.push(await fetch(
+                    'http://127.0.0.1:3000/' + database + '?cache=' + Math.random(),
+                    {
+                        method: 'GET',
+                        mode: 'cors',
+                    },
+                ))
+                fetch_time.end = Number(Date.now())
+                times[e][i] = (Math.abs(fetch_time.end - fetch_time.start))
+            } catch (e) {
+                throw new Error(String(e))
+            }
         }
     }
+
+    let output = ""
+
+    // Get average time for each datapoint 
+    for (let e = 0; e < times[0].length; e++) {
+        let average = 0
+        for (let i = 0; i < times.length; i++) {
+            average += times[i][e]
+        }
+        average /= times.length
+        output += average + "\n"
+    }
+
+    // Save times to file with a anchor tag
+    const database_name = (document.getElementById("database") as HTMLSelectElement).value == "getAllMongodb" ? "mongodb" : "mysql"
+    const timesFile = new File([output], `times.txt`, { type: "text/plain;charset=utf-8" })
+    const timesFileURL = URL.createObjectURL(timesFile)
+    const timesFileAnchor = document.createElement("a")
+    timesFileAnchor.href = timesFileURL
+    timesFileAnchor.download = `times.txt`
+    timesFileAnchor.click()
 
     // Get response and print them at the end
     const responses = await Promise.all(fetches)
@@ -51,8 +77,6 @@ async function callGetAllEndpoint() {
             err = true
             break;
         }
-
-        console.log(json)
 
         // Create index attribute
         const index = document.createElement("td")
@@ -105,22 +129,6 @@ async function callGetAllEndpoint() {
         // Increase the index
         columRow++
     }
-
-    let output = ""
-
-    // Format times
-    times.forEach((time) => {
-        output += time + "\n"
-    })
-
-    // Save times to file with a anchor tag
-    const database_name = (document.getElementById("database") as HTMLSelectElement).value == "getAllMongodb" ? "mongodb" : "mysql"
-    const timesFile = new File([output], `times.txt`, { type: "text/plain;charset=utf-8" })
-    const timesFileURL = URL.createObjectURL(timesFile)
-    const timesFileAnchor = document.createElement("a")
-    timesFileAnchor.href = timesFileURL
-    timesFileAnchor.download = `times.txt`
-    timesFileAnchor.click()
 
     if (err) {
         document.getElementById("running")!.innerHTML = "An error occured (are you using the correct database?)"
