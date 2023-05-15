@@ -49,10 +49,10 @@ The following datatypes will be used in the pilot study:
 #### Final Study
 The final study uses the following query:
 ```
-python3 src/generator/mysql/main.py --amount 1000 --type linestring --points 20 --instances 5 --seed 200
+python3 src/generator/mysql/main.py --amount 100 --type linestring --points 4 --instances 5 --seed 200
 ```
 
-With 1000 datapoints and 3 repeats.
+With 500 datapoints and 5 repeats.
 
 All datatypes will be used in the final study.
 

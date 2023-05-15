@@ -16,35 +16,35 @@ def generateLineDiagram(database):
 
     # Set the title of the plot
     if database == "mysql":
-        plt.title("MySQL latency in milliseconds over 100 attempt")
+        plt.title("MySQL latency in milliseconds over 1000 attempts")
     elif database == "mongodb":
-        plt.title("MongoDB latency in milliseconds over 100 attempt")
+        plt.title("MongoDB latency in milliseconds over 1000 attempts")
 
     # Set the labels of the plot
     plt.xlabel("Amount of requests")
     plt.ylabel("Time (ms)")
 
     # Get the files for the points
-    points = ["./{}/point/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database)]
+    points = ["./{}/point/times.txt".format(database), "./{}/multipoint/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database), "./{}/polygon/times.txt".format(database), "./{}/multipolygon/times.txt".format(database)]
 
     # Set colors
-    colors = ['#1f77b4', '#2ca02c', '#d62728']
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
 
     # Loop through the files
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 100])
+        plt.axis([None, None, 0, 150])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
         plt.plot(time_values, color=colors[points.index(file)])
 
     # Show the plot
-    # Customize the x-axis tick locations and labels
-    plt.xticks(np.arange(0, global_time_values + 1, 100))
-    plt.legend(["Point", "LineString", "MultiLineString"], loc='upper right')
-    plt.savefig('./figures/{}_linechart.png'.format(database))
+    # Customize the x-axis tick locations and labels rotated 45 degrees
+    plt.xticks(np.arange(0, global_time_values + 1, 100), rotation=45)
+    plt.legend(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"], loc='upper right')
+    plt.savefig('./figures/{}_linechart.png'.format(database), bbox_inches='tight')
 
 def generateBarDiagram(database):
     """
@@ -53,21 +53,21 @@ def generateBarDiagram(database):
     # Reset plt
     plt.clf()
 
-    x = np.array(["Point", "LineString", "MultiLineString"])
+    x = np.array(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"])
     means = []
     std = []
 
     # Set the title of the plot
     if database == "mysql":
-        plt.title("MySQL standard deviation in milliseconds over 100 attempt")
+        plt.title("MySQL standard deviation in milliseconds over 1000 attempts")
     elif database == "mongodb":
-        plt.title("MongoDB standard deviation in milliseconds over 100 attempt")
+        plt.title("MongoDB standard deviation in milliseconds over 1000 attempts")
 
     # Set the labels of the plot
     plt.ylabel("Time (ms)")
 
     # Get the files for the points
-    points = ["./{}/point/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database)]
+    points = ["./{}/point/times.txt".format(database), "./{}/multipoint/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database), "./{}/polygon/times.txt".format(database), "./{}/multipolygon/times.txt".format(database)]
 
     # Loop through the files
     for file in points:
@@ -81,19 +81,16 @@ def generateBarDiagram(database):
         # Standard error
         std.append(time_values.std()[0])
 
-    # Show the plot
-    # Customize the x-axis tick locations and labels
-    plt.legend(["Point", "LineString", "MultiLineString"], loc='center left', bbox_to_anchor=(1, 0.5))
-
     # Convert the list to a numpy array
     means = np.array(means)
     std = np.array(std)
+    plt.xticks(rotation=30)
 
     # Plot the bar diagram
     plt.errorbar(x, means, yerr=std, fmt='none', color='black', capsize=5)
     # Fix colors
-    plt.bar(x,means, color=['#1f77b4', '#2ca02c', '#d62728'])
-    plt.savefig('./figures/{}_STD.png'.format(database))
+    plt.bar(x,means, color = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'])
+    plt.savefig('./figures/{}_STD.png'.format(database), bbox_inches='tight')
 
 def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
     if len(data) == 2:
@@ -111,9 +108,9 @@ def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
         return False
 
 def getMeans():
-    # Get the pilot study files
-    points_mysql = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
-    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
+    # Get the files
+    points_mysql = ["./mysql/point/times.txt", "./mysql/multipoint/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt", "./mysql/polygon/times.txt", "./mysql/multipolygon/times.txt"]
+    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/multipoint/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt", "./mongodb/polygon/times.txt", "./mongodb/multipolygon/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
@@ -132,9 +129,9 @@ def getMeans():
         print("MySQL: " + str(mean_mysql[0]))
 
 def getAnova():
-    # Get the pilot study files
-    points_mysql = ["./mysql/point/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt"]
-    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt"]
+     # Get the files
+    points_mysql = ["./mysql/point/times.txt", "./mysql/multipoint/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt", "./mysql/polygon/times.txt", "./mysql/multipolygon/times.txt"]
+    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/multipoint/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt", "./mongodb/polygon/times.txt", "./mongodb/multipolygon/times.txt"]
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
@@ -152,8 +149,8 @@ def getAnova():
 
         print("")
 
-getAnova()
-# getMeans()
+# getAnova()
+getMeans()
 
 generateLineDiagram("mongodb")
 generateLineDiagram("mysql")

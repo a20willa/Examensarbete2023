@@ -7,7 +7,6 @@ from random import seed
 
 # Functions
 
-
 def generate_random_point_data(n):
     """
     Generates n random geospatial points in MySQL format.

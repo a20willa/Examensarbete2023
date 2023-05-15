@@ -56,7 +56,11 @@ def insertOnes(amount, type, points, seed):
     for i in range(amount):
         data = json.loads(generate_one_of_datatype(type, int(seed) + i, points))
         data = {'loc': data}
-        col.insert_one(data)
+        try:
+            col.insert_one(data)
+        except pymongo.errors.WriteError:
+            print("Failed {}".format(i))
+            exit(1)
 
 def select():
     """
