@@ -172,12 +172,17 @@ def getTotal():
     print("Sum for MongoDB: {}ms".format(str(sum_mongodb)))
     print("Sum for MySQL: {}ms".format(str(sum_mysql)))
 
+    # Create bar diagram
+    plt.title("Avarage total speed over 5 repetitions with all datatypes in (ms)")
+    plt.bar(["MongoDB", "MySQL"], [sum_mongodb, sum_mysql], color = ["#299637", "#2994e6"])
+    plt.savefig("./figures/total.png")
+
 # getAnova()
 # getMeans()
 
 getTotal()
 
-generateLineDiagram("mongodb")
-generateLineDiagram("mysql")
-generateBarDiagram("mongodb")
-generateBarDiagram("mysql")
+# generateLineDiagram("mongodb")
+# generateLineDiagram("mysql")
+# generateBarDiagram("mongodb")
+# generateBarDiagram("mysql")
