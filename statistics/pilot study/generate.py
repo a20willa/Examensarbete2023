@@ -80,7 +80,7 @@ def generateBarDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 80])
+        plt.axis([None, None, 0, 100])
 
         # Plot the time values for geospatial requests
         means.append(time_values.mean()[0])
