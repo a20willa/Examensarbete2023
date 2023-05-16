@@ -27,7 +27,7 @@ Options:
 
 Example usage:
 python src/generator/mysql/main.py --amount 10 --type linestring --points 10 --seed 200
-python src/generator/mongodb/main.py --amount 10 --type multilinestring --points 10 --instances 10 --seed 200
+python src/generator/mongodb/main.py --amount 500 --type multilinestring --points 4 --seed 200
 ```
 
 ### Values for testing
