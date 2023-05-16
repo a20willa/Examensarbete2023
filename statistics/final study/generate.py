@@ -34,7 +34,7 @@ def generateLineDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 150])
+        plt.axis([None, None, 0, 120])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
@@ -82,7 +82,7 @@ def generateBarDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 80])
+        plt.axis([None, None, 0, 120])
 
         # Plot the time values for geospatial requests
         means.append(time_values.mean()[0])

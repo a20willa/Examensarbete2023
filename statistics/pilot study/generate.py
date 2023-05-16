@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
-import json
 import numpy as np
 import scipy.stats as stats
 import numpy as np
 import pandas as pd
-from io import StringIO
 
 def generateLineDiagram(database):
     """
@@ -34,7 +32,7 @@ def generateLineDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 100])
+        plt.axis([None, None, 0, 120])
         global_time_values = len(time_values)
 
         # Plot the time values for geospatial requests
@@ -42,7 +40,7 @@ def generateLineDiagram(database):
 
     # Show the plot
     # Customize the x-axis tick locations and labels
-    plt.xticks(np.arange(0, global_time_values + 1, 100))
+    plt.xticks(np.arange(0, global_time_values + 1, 10))
     ax = plt.subplot(111)
     box = ax.get_position()
     ax.set_position([box.x0, box.y0 + box.height * 0.1,
@@ -80,7 +78,7 @@ def generateBarDiagram(database):
     for file in points:
         # Get the time values from the data
         time_values = pd.read_csv(file, header=None)
-        plt.axis([None, None, 0, 100])
+        plt.axis([None, None, 0, 120])
 
         # Plot the time values for geospatial requests
         means.append(time_values.mean()[0])
