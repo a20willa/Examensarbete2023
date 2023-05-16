@@ -149,8 +149,33 @@ def getAnova():
 
         print("")
 
+def getTotal():
+    # Get the files
+    points_mysql = ["./mysql/point/times.txt", "./mysql/multipoint/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt", "./mysql/polygon/times.txt", "./mysql/multipolygon/times.txt"]
+    points_mongodb = ["./mongodb/point/times.txt", "./mongodb/multipoint/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt", "./mongodb/polygon/times.txt", "./mongodb/multipolygon/times.txt"]
+
+    # Store sums
+    sum_mongodb = 0
+    sum_mysql = 0
+
+    # Loop through the files - MongoDB
+    for file in range(len(points_mongodb)):
+        df_mongodb = pd.read_csv(points_mongodb[file], header=None)
+        df_mysql = pd.read_csv(points_mysql[file], header=None)
+
+        total_mongodb = df_mongodb.sum()
+        total_mysql = df_mysql.sum()
+
+        sum_mongodb += int(total_mongodb[0])
+        sum_mysql += int(total_mysql[0])
+
+    print("Sum for MongoDB: {}ms".format(str(sum_mongodb)))
+    print("Sum for MySQL: {}ms".format(str(sum_mysql)))
+
 # getAnova()
-getMeans()
+# getMeans()
+
+getTotal()
 
 generateLineDiagram("mongodb")
 generateLineDiagram("mysql")
