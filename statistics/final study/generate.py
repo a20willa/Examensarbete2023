@@ -173,7 +173,7 @@ def getTotal():
     print("Sum for MySQL: {}ms".format(str(sum_mysql)))
 
     # Create bar diagram
-    plt.title("Avarage total speed over 5 repetitions with all datatypes in (ms)")
+    plt.title("Total combined speed of all datatypes (ms)")
     plt.bar(["MongoDB", "MySQL"], [sum_mongodb, sum_mysql], color = ["#299637", "#2994e6"])
     plt.savefig("./figures/total.png")
 
