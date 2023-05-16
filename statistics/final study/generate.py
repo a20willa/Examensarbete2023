@@ -43,7 +43,16 @@ def generateLineDiagram(database):
     # Show the plot
     # Customize the x-axis tick locations and labels rotated 45 degrees
     plt.xticks(np.arange(0, global_time_values + 1, 100), rotation=45)
-    plt.legend(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"], loc='upper right')
+
+    # Shrink current axis's height by 10% on the bottom
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                    box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"],loc='upper center', bbox_to_anchor=(0.5, -0.20),
+            fancybox=True, shadow=True, ncol=5)
     plt.savefig('./figures/{}_linechart.png'.format(database), bbox_inches='tight')
 
 def generateBarDiagram(database):
@@ -174,15 +183,15 @@ def getTotal():
 
     # Create bar diagram
     plt.title("Total combined speed of all datatypes (ms)")
+    plt.ylabel("Time (ms)")
     plt.bar(["MongoDB", "MySQL"], [sum_mongodb, sum_mysql], color = ["#299637", "#2994e6"])
     plt.savefig("./figures/total.png")
 
-# getAnova()
-# getMeans()
-
+getAnova()
+getMeans()
 getTotal()
 
-# generateLineDiagram("mongodb")
-# generateLineDiagram("mysql")
-# generateBarDiagram("mongodb")
-# generateBarDiagram("mysql")
+generateLineDiagram("mongodb")
+generateLineDiagram("mysql")
+generateBarDiagram("mongodb")
+generateBarDiagram("mysql")

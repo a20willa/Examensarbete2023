@@ -43,7 +43,14 @@ def generateLineDiagram(database):
     # Show the plot
     # Customize the x-axis tick locations and labels
     plt.xticks(np.arange(0, global_time_values + 1, 100))
-    plt.legend(["Point", "LineString", "MultiLineString"], loc='upper right')
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                    box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(["Point", "LineString", "MultiLineString"],loc='upper center', bbox_to_anchor=(0.5, -0.15),
+            fancybox=True, shadow=True, ncol=5)
     plt.savefig('./figures/{}_linechart.png'.format(database))
 
 def generateBarDiagram(database):
@@ -153,7 +160,7 @@ def getAnova():
         print("")
 
 getAnova()
-# getMeans()
+getMeans()
 
 generateLineDiagram("mongodb")
 generateLineDiagram("mysql")
