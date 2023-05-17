@@ -178,20 +178,20 @@ def getTotal():
         sum_mongodb += int(total_mongodb[0])
         sum_mysql += int(total_mysql[0])
 
-    print("Sum for MongoDB: {}ms".format(str(sum_mongodb)))
-    print("Sum for MySQL: {}ms".format(str(sum_mysql)))
+    print("Sum for MongoDB: {}ms".format(str(sum_mongodb / len(points_mongodb))))
+    print("Sum for MySQL: {}ms".format(str(sum_mysql / len(points_mysql))))
 
     # Create bar diagram
-    plt.title("Total combined speed of all datatypes (ms)")
+    plt.title("Avarage speed of all datatypes combined (ms)")
     plt.ylabel("Time (ms)")
-    plt.bar(["MongoDB", "MySQL"], [sum_mongodb, sum_mysql], color = ["#299637", "#2994e6"])
+    plt.bar(["MongoDB", "MySQL"], [sum_mongodb / len(points_mongodb), sum_mysql / len(points_mysql)], color = ["#299637", "#2994e6"])
     plt.savefig("./figures/total.png")
 
-getAnova()
-getMeans()
+# getAnova()
+# getMeans()
 getTotal()
 
-generateLineDiagram("mongodb")
-generateLineDiagram("mysql")
-generateBarDiagram("mongodb")
-generateBarDiagram("mysql")
+# generateLineDiagram("mongodb")
+# generateLineDiagram("mysql")
+# generateBarDiagram("mongodb")
+# generateBarDiagram("mysql")
