@@ -101,6 +101,62 @@ def generateBarDiagram(database):
     plt.bar(x,means, color = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'])
     plt.savefig('./figures/{}_STD.png'.format(database), bbox_inches='tight')
 
+def generateStepDiagram(database):
+    """
+    Generates a bar diagram for the geospatial requests
+    """
+    # Reset plt
+    plt.clf()
+
+    x = np.array([100, 500, 400, 400 * 5, 400, 400 * 5])
+    means = []
+
+    # Set the title of the plot
+    if database == "mysql":
+        plt.title("MySQL time in milliseconds with number of points")
+    elif database == "mongodb":
+        plt.title("MongoDB time in milliseconds with number of points")
+
+    # Set the labels of the plot
+    plt.ylabel("Time (ms)")
+    plt.xlabel("Amount of points")
+
+    # Get the files for the points
+    points = ["./{}/point/times.txt".format(database), "./{}/multipoint/times.txt".format(database), "./{}/linestring/times.txt".format(database), "./{}/multilinestring/times.txt".format(database), "./{}/polygon/times.txt".format(database), "./{}/multipolygon/times.txt".format(database)]
+
+    # Loop through the files
+    for file in points:
+        # Get the time values from the data
+        time_values = pd.read_csv(file, header=None)
+        plt.axis([None, None, 0, 120])
+
+        # Plot the time values for geospatial requests
+        means.append(time_values.mean()[0])
+
+    # Convert the list to a numpy array
+    means = np.array(means)
+
+    # Fix colors and scatter plots
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
+    for i in range(len(x)):
+        plt.scatter(x[i], means[i], color=colors[i])
+
+    # Shrink current axis's height by 10% on the bottom
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                    box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"],loc='upper center', bbox_to_anchor=(0.5, -0.20),
+            fancybox=True, shadow=True, ncol=5)
+    
+    ax.set_axisbelow(True)
+    plt.grid()
+
+    plt.savefig('./figures/{}_steps.png'.format(database), bbox_inches='tight')
+
+
 def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
     if len(data) == 2:
         statistic, pvalue = stats.f_oneway(data[0], data[1])
@@ -158,40 +214,53 @@ def getAnova():
 
         print("")
 
-def getTotal():
+def getTotal(type):
     # Get the files
     points_mysql = ["./mysql/point/times.txt", "./mysql/multipoint/times.txt", "./mysql/linestring/times.txt", "./mysql/multilinestring/times.txt", "./mysql/polygon/times.txt", "./mysql/multipolygon/times.txt"]
     points_mongodb = ["./mongodb/point/times.txt", "./mongodb/multipoint/times.txt", "./mongodb/linestring/times.txt", "./mongodb/multilinestring/times.txt", "./mongodb/polygon/times.txt", "./mongodb/multipolygon/times.txt"]
 
     # Store sums
-    sum_mongodb = 0
-    sum_mysql = 0
+    combined_mongodb = ""
+    combined_mysql = ""
 
     # Loop through the files - MongoDB
     for file in range(len(points_mongodb)):
-        df_mongodb = pd.read_csv(points_mongodb[file], header=None)
-        df_mysql = pd.read_csv(points_mysql[file], header=None)
+        with open(points_mongodb[file], "r") as file:
+            combined_mongodb += file.read()
 
-        total_mongodb = df_mongodb.sum()
-        total_mysql = df_mysql.sum()
+    # Loop through the files - MySQL
+    for file in range(len(points_mysql)):
+        with open(points_mysql[file], "r") as file:
+            combined_mysql += file.read()
+    
+    # Read as df
+    df_mongodb = pd.read_csv(StringIO(combined_mongodb), header=None)
+    df_mysql = pd.read_csv(StringIO(combined_mysql), header=None)
 
-        sum_mongodb += int(total_mongodb[0])
-        sum_mysql += int(total_mysql[0])
+    x = ["MongoDB", "MySQL"]
+    means = np.array([df_mongodb.mean()[0], df_mysql.mean()[0]])
+    if type == "std":
+        std = np.array([df_mongodb.std()[0], df_mysql.std()[0]])
+        plt.title("MySQL and MongoDB standard deviation in milliseconds")
 
-    print("Sum for MongoDB: {}ms".format(str(sum_mongodb / len(points_mongodb))))
-    print("Sum for MySQL: {}ms".format(str(sum_mysql / len(points_mysql))))
+    elif type == "sem":
+        std = np.array([df_mongodb.sem()[0], df_mysql.sem()[0]])
+        plt.title("MySQL and MongoDB standard error in milliseconds")
 
     # Create bar diagram
-    plt.title("Avarage speed of all datatypes combined (ms)")
     plt.ylabel("Time (ms)")
-    plt.bar(["MongoDB", "MySQL"], [sum_mongodb / len(points_mongodb), sum_mysql / len(points_mysql)], color = ["#299637", "#2994e6"])
+    plt.errorbar(x, means, yerr=std, fmt='none', color='black', capsize=5)
+    plt.bar(x, means, color = ["#299637", "#2994e6"])
     plt.savefig("./figures/total.png")
 
 # getAnova()
 # getMeans()
-getTotal()
+# getTotal("std")
+# getTotal("sem")
 
 # generateLineDiagram("mongodb")
 # generateLineDiagram("mysql")
 # generateBarDiagram("mongodb")
 # generateBarDiagram("mysql")
+# generateStepDiagram("mongodb")
+# generateStepDiagram("mysql")
