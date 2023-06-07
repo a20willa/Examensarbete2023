@@ -14,9 +14,9 @@ def generateLineDiagram(database):
 
     # Set the title of the plot
     if database == "mysql":
-        plt.title("MySQL latency in milliseconds over 100 attempt")
+        plt.title("MySQL fetch query latency in milliseconds over 100 attempts")
     elif database == "mongodb":
-        plt.title("MongoDB latency in milliseconds over 100 attempt")
+        plt.title("MongoDB fetch query latency in milliseconds over 100 attempts")
 
     # Set the labels of the plot
     plt.xlabel("Amount of requests")
@@ -49,7 +49,7 @@ def generateLineDiagram(database):
     # Put a legend below current axis
     ax.legend(["Point", "LineString", "MultiLineString"],loc='upper center', bbox_to_anchor=(0.5, -0.15),
             fancybox=True, shadow=True, ncol=5)
-    plt.savefig('./figures/{}_linechart.png'.format(database))
+    plt.savefig('./figures/{}_linechart.png'.format(database), bbox_inches='tight')
 
 def generateBarDiagram(database):
     """
@@ -64,9 +64,9 @@ def generateBarDiagram(database):
 
     # Set the title of the plot
     if database == "mysql":
-        plt.title("MySQL standard deviation in milliseconds over 100 attempt")
+        plt.title("MySQL fetch query standard deviation in milliseconds over 100 attempts")
     elif database == "mongodb":
-        plt.title("MongoDB standard deviation in milliseconds over 100 attempt")
+        plt.title("MongoDB fetch query standard deviation in milliseconds over 100 attempts")
 
     # Set the labels of the plot
     plt.ylabel("Time (ms)")
@@ -98,7 +98,7 @@ def generateBarDiagram(database):
     plt.errorbar(x, means, yerr=std, fmt='none', color='black', capsize=5)
     # Fix colors
     plt.bar(x,means, color=['#1f77b4', '#2ca02c', '#d62728'])
-    plt.savefig('./figures/{}_STD.png'.format(database))
+    plt.savefig('./figures/{}_STD.png'.format(database), bbox_inches='tight')
 
 def anova(*data):  # * indicates, 0, 1 , 2 .. arguments
     if len(data) == 2:
@@ -158,7 +158,7 @@ def getAnova():
         print("")
 
 getAnova()
-getMeans()
+# getMeans()
 
 generateLineDiagram("mongodb")
 generateLineDiagram("mysql")
